@@ -19,8 +19,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/PocketPal"
-Repository = "https://github.com/yourusername/PocketPal"
+Homepage = "https://github.com/vp-mx/pocketpal"
+Repository = "https://github.com/vp-mx/pocketpal"
 
 [project.scripts]
 pocketpal = "pocketpal:main"
@@ -28,11 +28,6 @@ pocketpal = "pocketpal:main"
 [tool.black]
 line-length = 120
 include = "utils|models|main.py"
-
-[tool.pylint]
-disable = ["R0903"]
-ignore = ["venv", ".venv", ".*"]
-max-line-length = 120
 
 [tool.isort]
 profile = "black"

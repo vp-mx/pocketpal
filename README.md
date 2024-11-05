@@ -7,9 +7,9 @@ PocketPal is a terminal application that allows users to create, read, update, a
 
 1. Clone the repository
 2. Create a virtual environment in the project directory: `python -m venv .venv`
-3. Activate the virtual environment: `source .venv/bin/activate`
+3. Activate the virtual environment: Mac, Linux `source .venv/bin/activate` or `.venv\Scripts\activate` for Windows'
 4. Install the required packages: `pip install -r requirements.txt`
-5. Run the application: `python main.py`
+5. Run the application: `python .`
 6. Enjoy!
 
 ### Usage

@@ -1,6 +1,6 @@
 """Main module to run the assistant bot."""
 
-from utils.actions import (
+from actions import (
     add_birthday,
     add_contact,
     birthdays,
