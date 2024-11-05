@@ -22,8 +22,8 @@ classifiers = [
 Homepage = "https://github.com/yourusername/PocketPal"
 Repository = "https://github.com/yourusername/PocketPal"
 
-#[project.dependencies]
-#dependencies = []
+[project.scripts]
+pocketpal = "pocketpal:main"
 
 [tool.black]
 line-length = 120
