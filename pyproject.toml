@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PocketPal"
+version = "0.1.0"
+description = "A terminal application for managing contacts and notes."
+authors = [
+    { name = "Name", email = "email@example.com" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/PocketPal"
+Repository = "https://github.com/yourusername/PocketPal"
+
+[project.dependencies]
+python = ">=3.7"
+
+[tool.black]
+line-length = 120
+include = "utils|models|main.py"
+
+[tool.pylint]
+disable = ["R0903"]
+init-hook = "import sys; sys.path.extend(['utils', 'models'])"
+max-line-length = 120
+
+[tool.isort]
+profile = "black"
+src_paths = ["utils", "models", "main.py"]
