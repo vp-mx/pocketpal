@@ -31,8 +31,9 @@ include = "utils|models|main.py"
 
 [tool.pylint]
 disable = ["R0903"]
-init-hook = "import sys; sys.path.extend(['utils', 'models'])"
+ignore = ["venv", ".venv", ".*"]
 max-line-length = 120
+
 
 [tool.isort]
 profile = "black"

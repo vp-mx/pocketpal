@@ -2,7 +2,7 @@
 
 import pickle
 
-from models.address_book import Record, AddressBook
+from models.address_book import AddressBook, Record
 from utils.error_handlers import input_error
 
 FILE_PKL = "address_book.pkl"

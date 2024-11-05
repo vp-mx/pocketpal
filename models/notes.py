@@ -1,7 +1,8 @@
 """Module for storing classes related to the notes"""
+
 from collections import UserDict
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
 
 class Note:
