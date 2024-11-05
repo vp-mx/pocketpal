@@ -2,8 +2,8 @@
 
 import pickle
 
-from models.address_book import Record, AddressBook
-from utils.error_handlers import input_error
+from address_book import AddressBook, Record
+from error_handlers import input_error
 
 FILE_PKL = "address_book.pkl"
 
