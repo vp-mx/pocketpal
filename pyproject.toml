@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "PocketPal"
+name = "pocketpal"
 version = "0.1.0"
 description = "A terminal application for managing contacts and notes."
 authors = [
