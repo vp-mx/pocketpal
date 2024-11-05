@@ -1,4 +1,5 @@
 """This module contains the functions to perform actions on the address book."""
+
 import os
 import pickle
 from pathlib import Path
@@ -132,5 +133,6 @@ def load_data(filename: str = FILE_PKL):
     try:
         with open(filename, "rb") as pkl_file:
             return pickle.load(pkl_file)
+
     except FileNotFoundError:
         return AddressBook()
