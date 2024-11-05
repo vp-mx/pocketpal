@@ -27,8 +27,12 @@ pocketpal = "pocketpal:main"
 
 [tool.black]
 line-length = 120
-include = "utils|models|main.py"
 
 [tool.isort]
 profile = "black"
-src_paths = ["utils", "models", "main.py"]
+
+[tool.pylint]
+ignore = ["venv", ".venv", ".*"]
+disable = ["too-few-public-methods"]
+init-hook = "import sys; sys.path.append('./src')"
+max-line-length = 120
