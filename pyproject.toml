@@ -23,7 +23,7 @@ Homepage = "https://github.com/yourusername/PocketPal"
 Repository = "https://github.com/yourusername/PocketPal"
 
 [project.dependencies]
-python = ">=3.7"
+dependencies = []
 
 [tool.black]
 line-length = 120
@@ -33,7 +33,6 @@ include = "utils|models|main.py"
 disable = ["R0903"]
 ignore = ["venv", ".venv", ".*"]
 max-line-length = 120
-
 
 [tool.isort]
 profile = "black"
