@@ -1,5 +1,6 @@
 """Main module to run the assistant bot."""
 
+from autocomplete import session
 from actions import (
     add_birthday,
     add_contact,
@@ -31,7 +32,7 @@ def main():
     book = load_data()
     print("Welcome to the assistant bot!")
     while True:
-        user_input = input("Enter a command: ")
+        user_input = session.prompt("Enter a command: ")
         if not user_input.strip():
             continue
         command, args = parse_input(user_input)
