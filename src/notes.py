@@ -3,8 +3,6 @@
 from collections import UserDict
 from datetime import datetime
 from typing import List, Optional
-from address_book import AddressBook, Record
-from uuid import uuid4
 
 
 class Note:
@@ -12,14 +10,12 @@ class Note:
 
     def __init__(self, title: str, body: str, tags: Optional[List[str]] = None, contacts: Optional[List[str]] = None) -> None:
         """Initialize the note.
-
         :param title: The title of the note.
         :param body: The body of the note.
         :param tags: A list of tags for the note.
         :param contacts: A list of contacts if the note is attached to a contact.
         """
 
-        self.id = uuid4
         self.title = title
         self.body = body
         self.creation_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -49,12 +45,7 @@ class Note:
         self._tags.remove(tag)
 
     def __repr__(self):
-        return f"{self.id}-{self.__class__.__name__} ({self.title}, {self.creation_date}, {self.body}, {self._tags}, {self._contacts})"
-
-
-my_note = Note('title', 'something here as body', [
-               'tag1', 'tag2'], ['contact1', 'contact2'])
-print(my_note)
+        return f"({self.title}, {self.creation_date}, {self.body}, {self._tags}, {self._contacts})"
 
 
 class NoteBook(UserDict):
@@ -98,3 +89,13 @@ class NoteBook(UserDict):
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.data})"
+
+
+my_notebook = NoteBook()
+my_notebook.add("First note", "This is the first note")
+my_notebook.add("Second note", "This is the second note")
+my_notebook.add("Third note", "This is the third note")
+my_notebook.add("Fourth note", "This is the fourth note")
+my_note = Note("Fifth note", "This is the fifth note")
+print(type(my_note))
+print(type(my_notebook.data), my_notebook.data)
