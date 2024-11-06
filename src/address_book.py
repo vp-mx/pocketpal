@@ -267,7 +267,8 @@ class AddressBook(UserDict):
         :return: string with upcoming birthdays separated by newlines for each contact.
         """
         today = datetime.today().date()
-        contacts_with_birthdays = [record for record in self.values() if record.birthday is not None]
+        contacts_with_birthdays = [
+            record for record in self.values() if record.birthday is not None]
         upcoming_birthdays = []
 
         for user in contacts_with_birthdays:
@@ -282,7 +283,8 @@ class AddressBook(UserDict):
                     greet_date += timedelta(days=8 - greet_date.isoweekday())
                 congratulation_date = greet_date.strftime("%d.%m.%Y")
                 upcoming_birthdays.append(
-                    f"Contact name: {user.name.value}, congratulation date: {congratulation_date}"
+                    f"Contact name: {user.name.value}, congratulation date: {
+                        congratulation_date}"
                 )
 
         return "\n".join(upcoming_birthdays) or "No upcoming birthdays found."
