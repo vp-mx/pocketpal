@@ -8,6 +8,14 @@ class HelperError(BaseException):
     """Base exception for helper errors."""
 
 
+class InputArgsError(BaseException):
+    """Base exception for helper errors."""
+
+    def __init__(self, message: str) -> None:
+        self.message = f"Wrong args for command. Example: {message}"
+        super().__init__(self.message)
+
+
 def input_error(func: Callable[..., str]) -> Callable[..., str]:
     """Decorator to handle errors in the input."""
 
@@ -16,6 +24,8 @@ def input_error(func: Callable[..., str]) -> Callable[..., str]:
         try:
             return func(*args, **kwargs)
         except HelperError as e:
+            return str(e)
+        except InputArgsError as e:
             return str(e)
         except (ValueError, KeyError, TypeError, IndexError):
             return "Error: Invalid input. Check it and try again."

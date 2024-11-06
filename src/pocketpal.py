@@ -4,7 +4,6 @@ from prompt_toolkit import PromptSession
 
 from actions import (
     add_birthday,
-    add_contact,
     birthdays,
     change_contact,
     load_data,
@@ -15,6 +14,8 @@ from actions import (
     show_phone,
 )
 from autocomplete import CommandCompleter
+from commands import Commands
+from error_handlers import InputArgsError
 
 
 def parse_input(user_input: str) -> tuple[str, list[str]]:
@@ -44,10 +45,18 @@ def main():
             print("Good bye!")
             save_data(book)
             break
-        if command == "hello":
+        command_object = Commands.get_command(command)
+        if command_object:
+            try:
+                command_object.value.validate_args(args)
+            except InputArgsError as e:
+                print(e)
+                continue
+            print(command_object.value.run(args, book))
+            if command in (Commands.EXIT,):
+                save_data(book)
+        elif command == "hello":
             print("How can I help you?")
-        elif command == "add":
-            print(add_contact(args, book))
         elif command == "change":
             print(change_contact(args, book))
         elif command == "remove":

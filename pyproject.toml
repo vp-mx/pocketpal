@@ -19,7 +19,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "prompt-toolkit = '^3.0'",
+    "prompt-toolkit == 3.*",
 ]
 
 [project.urls]
