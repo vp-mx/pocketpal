@@ -76,6 +76,7 @@ Write a command in the terminal to interact with the application. User can use t
 - `add-birthday <name> <date>`: Add a birthday to a contact.
 - `show-birthday <name>`: Show the birthday of a contact.
 - `birthdays`: Show upcoming birthdays within the next 7 days.
+- `add-address`: Add address to contact
 
 ### Code style
 
