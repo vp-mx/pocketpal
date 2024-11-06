@@ -29,6 +29,22 @@ def add_contact(args: list[str], book: "AddressBook") -> str:
 
 
 @input_error
+def remove_contact(args: list[str], book: "AddressBook") -> str:
+    """Removes a contact from the address book.
+
+    param: args: List with 1 value: name.
+    param: book: AddressBook object to modify.
+    return: str: Result message.
+    """
+    if len(args) != 1:
+        return "Invalid command format. Use: remove [name]"
+    if book.find(args[0]):
+        book.delete(args[0])
+        return "Contact removed."
+    return "Contact not found."
+
+
+@input_error
 def change_contact(args: list[str], book: "AddressBook") -> str:
     """Changes the phone number of a contact in the address book.
 

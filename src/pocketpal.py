@@ -10,6 +10,7 @@ from actions import (
     show_all,
     show_birthday,
     show_phone,
+    remove_contact,
 )
 
 
@@ -45,6 +46,8 @@ def main():
             print(add_contact(args, book))
         elif command == "change":
             print(change_contact(args, book))
+        elif command == "remove":
+            print(remove_contact(args, book))
         elif command == "phone":
             print(show_phone(args, book))
         elif command == "all":

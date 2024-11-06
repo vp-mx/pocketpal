@@ -19,6 +19,7 @@ Write a command in the terminal to interact with the application. User can use t
 - `hello`: Print a greeting message.
 - `close` or `exit`: Save data and exit the application.
 - `add <name> <phone>`: Add a new contact.
+- `remove <name>`: Remove the contact.
 - `change <name> <new_phone>`: Change an existing contact's phone number.
 - `phone <name>`: Show the phone number of a contact.
 - `all`: Show all contacts.
