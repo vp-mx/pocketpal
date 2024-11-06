@@ -1,11 +1,13 @@
 """This module contains the functions to perform actions on the address book."""
 
+import os
 import pickle
+from pathlib import Path
 
 from address_book import AddressBook, Record
 from error_handlers import input_error
 
-FILE_PKL = "address_book.pkl"
+FILE_PKL = Path().home() / "PocketPal" / "pocket_pal_data.pkl"
 
 
 @input_error
@@ -111,14 +113,14 @@ def birthdays(book: "AddressBook") -> str:
     return book.get_upcoming_birthdays()
 
 
-def save_data(book: "AddressBook", filename: str = FILE_PKL) -> None:
+def save_data(book: "AddressBook", filepath: Path = FILE_PKL) -> None:
     """Saves the address book to a file.
 
     param: book: AddressBook object to save.
     param: filename: File name to save the data.
     """
-
-    with open(filename, "wb") as pkl_file:
+    os.makedirs(filepath.parent, exist_ok=True)
+    with open(filepath, "wb") as pkl_file:
         pickle.dump(book, pkl_file)
 
 
@@ -131,5 +133,6 @@ def load_data(filename: str = FILE_PKL):
     try:
         with open(filename, "rb") as pkl_file:
             return pickle.load(pkl_file)
+
     except FileNotFoundError:
         return AddressBook()
