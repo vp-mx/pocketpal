@@ -6,16 +6,17 @@ from actions import (
     add_birthday,
     birthdays,
     change_contact,
-    load_data,
     remove_contact,
-    save_data,
     show_all,
     show_birthday,
     show_phone,
 )
+from address_book import AddressBook
 from autocomplete import CommandCompleter
-from commands import Commands
-from error_handlers import InputArgsError
+from commands import Commands, Source
+from error_handlers import ExitApp, InputArgsError
+from file_operations import ADDRESS_BOOK_FILE, NOTES_FILE, load_data, save_data
+from notes import NoteBook
 
 
 def parse_input(user_input: str) -> tuple[str, list[str]]:
@@ -33,46 +34,47 @@ def parse_input(user_input: str) -> tuple[str, list[str]]:
 def main():
     """Main function to run the assistant bot."""
 
-    book = load_data()
+    book = load_data(ADDRESS_BOOK_FILE) or AddressBook()
+    notes = load_data(NOTES_FILE) or NoteBook()
     session = PromptSession(completer=CommandCompleter())
     print("Welcome to the assistant bot!")
     while True:
-        user_input = session.prompt("Enter a command: ")
-        if not user_input.strip():
-            continue
-        command, args = parse_input(user_input)
-        if command in ["close", "exit"]:
-            print("Good bye!")
-            save_data(book)
-            break
-        command_object = Commands.get_command(command)
-        if command_object:
-            try:
-                command_object.value.validate_args(args)
-            except InputArgsError as e:
-                print(e)
+        try:
+            user_input = session.prompt("Enter a command: ")
+            if not user_input.strip():
                 continue
-            print(command_object.value.run(args, book))
-            if command in (Commands.EXIT,):
-                save_data(book)
-        elif command == "hello":
-            print("How can I help you?")
-        elif command == "change":
-            print(change_contact(args, book))
-        elif command == "remove":
-            print(remove_contact(args, book))
-        elif command == "phone":
-            print(show_phone(args, book))
-        elif command == "all":
-            print(show_all(book))
-        elif command == "add-birthday":
-            print(add_birthday(args, book))
-        elif command == "show-birthday":
-            print(show_birthday(args, book))
-        elif command == "birthdays":
-            print(birthdays(book))
-        else:
-            print("Invalid command.")
+            command, args = parse_input(user_input)
+            if command_object := Commands.get_command(command):
+                command_object.value.validate_args(args)
+                object_to_modify = book if command_object.value.source == Source.ADDRESS_BOOK else notes
+                print(command_object.value.run(args, object_to_modify))
+                if command_object in (Commands.EXIT, Commands.CLOSE):
+                    raise ExitApp
+            elif command == "hello":
+                print("How can I help you?")
+            elif command == "change":
+                print(change_contact(args, book))
+            elif command == "remove":
+                print(remove_contact(args, book))
+            elif command == "phone":
+                print(show_phone(args, book))
+            elif command == "all":
+                print(show_all(book))
+            elif command == "add-birthday":
+                print(add_birthday(args, book))
+            elif command == "show-birthday":
+                print(show_birthday(args, book))
+            elif command == "birthdays":
+                print(birthdays(book))
+            else:
+                print("Invalid command.")
+        except InputArgsError as input_args_error:
+            print(input_args_error)
+        except (KeyboardInterrupt, ExitApp):
+            save_data(book, ADDRESS_BOOK_FILE)
+            save_data(notes, NOTES_FILE)
+            print("Data saved")
+            break
 
 
 if __name__ == "__main__":

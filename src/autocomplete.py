@@ -20,7 +20,6 @@ commands = [
     "add-birthday",
     "show-birthday",
     "birthdays",
-    "close",
 ] + Commands.get_commands_list()
 
 

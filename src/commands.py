@@ -1,11 +1,18 @@
 """Module to store the commands and their information."""
 
 from dataclasses import dataclass
-from enum import Enum
-from typing import Optional
+from enum import Enum, auto
+from typing import Callable, Optional
 
 from actions import add_contact
 from error_handlers import InputArgsError
+
+
+class Source(Enum):
+    """Enum to store the source where to apply command."""
+
+    ADDRESS_BOOK = auto()
+    NOTES = auto()
 
 
 @dataclass
@@ -14,9 +21,10 @@ class Command:
 
     cli_name: str
     description: str
-    run: callable
+    run: Callable[[...], str]
     args_len: int
     input_help: str
+    source: Source
 
     def validate_args(self, args: Optional[list[str]] = None):
         """Validates the number of arguments.
@@ -39,13 +47,23 @@ class Commands(Enum):
         run=add_contact,
         args_len=2,
         input_help="add [name] [phone]",
+        source=Source.ADDRESS_BOOK,
     )
     EXIT = Command(
         cli_name="exit",
         description="Exits the assistant bot.",
-        run=lambda: "Good bye!",
+        run=lambda *_: "Good bye!",
         args_len=0,
         input_help="exit",
+        source=Source.ADDRESS_BOOK,
+    )
+    CLOSE = Command(
+        cli_name="close",
+        description="Closes the assistant bot.",
+        run=lambda *_: "Good bye!",
+        args_len=0,
+        input_help="close",
+        source=Source.ADDRESS_BOOK,
     )
 
     @classmethod

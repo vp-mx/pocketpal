@@ -8,6 +8,10 @@ class HelperError(BaseException):
     """Base exception for helper errors."""
 
 
+class ExitApp(BaseException):
+    """Exception for exit from app"""
+
+
 class InputArgsError(BaseException):
     """Base exception for helper errors."""
 
