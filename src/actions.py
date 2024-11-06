@@ -129,6 +129,23 @@ def birthdays(book: "AddressBook") -> str:
     return book.get_upcoming_birthdays()
 
 
+@input_error
+def add_address(args: list[str], book: "AddressBook") -> str:
+    """Adds an address to a contact in the address book.
+
+    param: args: List with 2 values: name and address.
+    param: book: AddressBook object to modify.
+    return: str: Result message.
+    """
+    if len(args) != 2:
+        return "Invalid command format. Use: add-address [name] [address]"
+    name, address = args
+    if record := book.find(name):
+        record.add_address(address)
+        return "Address added."
+    return "Contact not found."
+
+
 def save_data(book: "AddressBook", filepath: Path = FILE_PKL) -> None:
     """Saves the address book to a file.
 

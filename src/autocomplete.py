@@ -21,6 +21,8 @@ commands = [
     "show-birthday",
     "birthdays",
     "close",
+    # Address-related commands
+    "add-address",
 ] + Commands.get_commands_list()
 
 
