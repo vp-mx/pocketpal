@@ -1,7 +1,7 @@
 """Main module to run the assistant bot."""
 
 from prompt_toolkit import PromptSession
-from autocomplete import CommandCompleter
+
 from actions import (
     add_birthday,
     add_contact,
@@ -14,7 +14,7 @@ from actions import (
     show_birthday,
     show_phone,
 )
-
+from autocomplete import CommandCompleter
 
 
 def parse_input(user_input: str) -> tuple[str, list[str]]:
