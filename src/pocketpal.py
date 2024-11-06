@@ -6,11 +6,11 @@ from actions import (
     birthdays,
     change_contact,
     load_data,
+    remove_contact,
     save_data,
     show_all,
     show_birthday,
     show_phone,
-    remove_contact,
 )
 
 
