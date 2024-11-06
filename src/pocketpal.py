@@ -1,5 +1,7 @@
 """Main module to run the assistant bot."""
 
+from prompt_toolkit import PromptSession
+
 from actions import (
     add_birthday,
     add_contact,
@@ -12,6 +14,7 @@ from actions import (
     show_birthday,
     show_phone,
 )
+from autocomplete import CommandCompleter
 
 
 def parse_input(user_input: str) -> tuple[str, list[str]]:
@@ -30,9 +33,10 @@ def main():
     """Main function to run the assistant bot."""
 
     book = load_data()
+    session = PromptSession(completer=CommandCompleter())
     print("Welcome to the assistant bot!")
     while True:
-        user_input = input("Enter a command: ")
+        user_input = session.prompt("Enter a command: ")
         if not user_input.strip():
             continue
         command, args = parse_input(user_input)
