@@ -3,10 +3,11 @@
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.document import Document
 
+from commands import Commands
+
 commands = [
     "hello",
     "menu",
-    "add",
     "phone",
     "change",
     "all",
@@ -20,8 +21,7 @@ commands = [
     "show-birthday",
     "birthdays",
     "close",
-    "exit",
-]
+] + Commands.get_commands_list()
 
 
 class CommandCompleter(Completer):
