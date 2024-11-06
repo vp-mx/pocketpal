@@ -16,3 +16,4 @@ repos:
     hooks:
       - id: pylint
         args: ["--max-line-length=120", "src"]
+        additional_dependencies: ['prompt-toolkit']

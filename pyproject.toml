@@ -18,6 +18,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+dependencies = [
+    "prompt-toolkit = '^3.0'",
+]
+
 [project.urls]
 Homepage = "https://github.com/vp-mx/pocketpal"
 Repository = "https://github.com/vp-mx/pocketpal"
@@ -33,6 +37,6 @@ profile = "black"
 
 [tool.pylint]
 ignore = ["venv", ".venv", ".*"]
-disable = ["too-few-public-methods"]
+disable = ["too-few-public-methods", "too-many-branches"]
 init-hook = "import sys; sys.path.append('./src')"
 max-line-length = 120
