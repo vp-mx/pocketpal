@@ -1,1 +1,2 @@
 prompt-toolkit==3.0.48
+rich==13.9.4
