@@ -4,6 +4,7 @@ from collections import UserDict
 from datetime import datetime
 from typing import List, Optional
 from address_book import AddressBook, Record
+from uuid import uuid4
 
 
 class Note:
@@ -18,6 +19,7 @@ class Note:
         :param contacts: A list of contacts if the note is attached to a contact.
         """
 
+        self.id = uuid4
         self.title = title
         self.body = body
         self.creation_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -47,7 +49,7 @@ class Note:
         self._tags.remove(tag)
 
     def __repr__(self):
-        return f"{self.__class__.__name__} ({self.title}, {self.creation_date}, {self.body}, {self._tags}, {self._contacts})"
+        return f"{self.id}-{self.__class__.__name__} ({self.title}, {self.creation_date}, {self.body}, {self._tags}, {self._contacts})"
 
 
 my_note = Note('title', 'something here as body', [
