@@ -1,8 +1,8 @@
 """This module contains the functions to perform actions on the address book."""
 
 from address_book import AddressBook, Record
-from notes import NoteBook
 from error_handlers import input_error
+from notes import NoteBook
 
 
 @input_error
@@ -231,15 +231,11 @@ def add_note(args: list[str], book: "AddressBook", notes_book: "NoteBook") -> st
     if len(args) != 2:
         return "Invalid command format. Use: add-note [name] [note]"
     name, note = args
-
     if record := book.find(name):
-        """ Add note to the contact and the notes dictionary by the contact name. """
-
-        note_title = f"note-{notes_book.values().__len__() + 1}"
+        note_title = f"note-{len(notes_book.values())}"
         record.add_note(note_title)
         notes_book.add(note_title, note)
         notes_book.attach_to_contact(note_title, name)
-
         return "Note added."
     return "Contact not found."
 
@@ -389,7 +385,7 @@ print(add_contact(["Jane", "0987654321"], my_book))
 print(add_note(["Jane", "its note"], my_book, my_notes))
 print(add_note(["John", "another note"], my_book, my_notes))
 print(add_note(["Jane", "pretty  note"], my_book, my_notes))
-print('notebook', show_all_notes(my_notes))
+print("notebook", show_all_notes(my_notes))
 
 print(edit_note(["note-1", "edited note"], my_notes))
 print(edit_note(["note-1", "2 edited note"], my_notes))
@@ -401,9 +397,9 @@ print(add_note_tag(["note-1", "tag3"], my_notes))
 print(attach_to_contact(["note-1", "Jane"], my_notes))
 print(attach_to_contact(["note-1", "John"], my_notes))
 print(remove_note_tag(["note-1", "TAGGGGGG"], my_notes))
-print('Jane notes', show_all_notes_contact("Jane", my_notes))
-print('John notes', show_all_notes_contact("John", my_notes))
-print('search', search_in_notes(["pretty"], my_notes))
+print("Jane notes", show_all_notes_contact("Jane", my_notes))
+print("John notes", show_all_notes_contact("John", my_notes))
+print("search", search_in_notes(["pretty"], my_notes))
 
 print(my_book.all_records)
 print(find_by_tag(["tag2"], my_notes))
