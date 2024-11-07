@@ -137,3 +137,80 @@ def add_address(args: list[str], book: "AddressBook") -> str:
         record.add_address(address)
         return "Address added."
     return "Contact not found."
+
+
+@input_error
+def add_email(args, book):
+    """Add an email to a contact.
+
+    param: args: List with 2 values - name and email.
+    param: book: AddressBook object to read from.
+    return: str: Result message.
+    """
+
+    name, email = args
+
+    record = book.find(name)
+
+    if record:
+        record.add_email(email)
+        return f"Email '{email}' was successfully added for contact '{name}'."
+
+    return f"Contact '{name}' doesn't exist."
+
+
+@input_error
+def edit_email(args, book):
+    """Edit an email for a contact.
+
+    param: args: List with 3 values - name, old_email and new_email.
+    param: book: AddressBook object to read from.
+    return: str: Result message.
+    """
+    name, old_email, new_email = args
+
+    record = book.find(name)
+    if record:
+        record.edit_email(old_email, new_email)
+        return f"Email '{old_email}' was successfully changed to '{new_email}' for contact '{name}'."
+
+    return f"Contact '{name}' doesn't exist."
+
+
+@input_error
+def remove_email(args, book):
+    """Remove an email for a contact.
+
+    param: args: List with 2 values - name and email.
+    param: book: AddressBook object to read from.
+    return: str: Result message.
+    """
+    name, email = args
+
+    record = book.find(name)
+    if record:
+        record.remove_email(email)
+        return f"Email '{email}' was successfully deleted for contact '{name}'."
+
+    return f"Contact '{name}' doesn't exist."
+
+
+@input_error
+def show_email(args, book):
+    """Show contact email/emails.
+
+    param: args: List with 1 value - name.
+    param: book: AddressBook object to read from.
+    return: str: Result message.
+    """
+    name = args[0]
+
+    record = book.find(name)
+    if record:
+        return (
+            "Contact doesn't have any emails"
+            if not record.emails
+            else "; ".join(email.value for email in record.emails)
+        )
+
+    return f"Contact '{name}' doesn't exist."

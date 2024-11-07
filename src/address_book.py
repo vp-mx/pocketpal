@@ -80,6 +80,32 @@ class Birthday(Field):
             raise HelperError("Invalid date format. Use DD.MM.YYYY") from e
 
 
+class Email(Field):
+    """Class for storing an email with validation"""
+
+    def __init__(self, value):
+        """Initialize the email field.
+
+        :param value: The email in name@domen.domen format.
+        :raises HelperError: If the email format is invalid.
+        """
+        if self.validation(value):
+            super().__init__(value)
+
+    @staticmethod
+    def validation(email):
+        """Validate an email string.
+
+        :param value: The email string to validate.
+        :return: validated email.
+        :raises HelperError: If the email format is invalid.
+        """
+        if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
+            raise HelperError(f"Validation for email '{email}' is declined.")
+
+        return email
+
+
 class Record:
     """Class for storing contact information, including name, phone numbers, and birthday."""
 
@@ -92,6 +118,7 @@ class Record:
         self.phones: list[Phone] = []
         self.birthday: Optional[Birthday] = None
         self.address: Optional[str] = None
+        self.emails = []
 
     @property
     def all_phones(self):
@@ -155,10 +182,45 @@ class Record:
         """
         self.address = address
 
+    def add_email(self, email):
+        """Add an email to the contact.
+
+        :param email: The email to add.
+        """
+        self.emails.append(Email(email))
+
+    def edit_email(self, old_email, new_email):
+        """Edit the email for a contact.
+
+        :params: old_email, new_email.
+        :return: str: Result message.
+        """
+        if self.emails:
+            for key, email in enumerate(self.emails):
+                if email.value == old_email:
+                    self.emails[key] = Email(new_email)
+                    return True
+                raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
+        raise HelperError("This contact doesn't have any emails to edit.")
+
+    def remove_email(self, email):
+        """Remove the email from the contact.
+
+        :param email: The email to remove.
+        """
+        if self.emails:
+            for i in self.emails:
+                if i.value == email:
+                    self.emails.remove(i)
+                    return True
+            raise HelperError(f"Email '{email}' doesn't exist for this contact.")
+        raise HelperError("This contact doesn't have any emails to remove.")
+
     def __str__(self) -> str:
         return (
             f"Contact name: {self.name.value}; phones: {self.all_phones}; "
-            f"birthday: {self.birthday or 'N/A'}; address: {self.address or 'N/A'}"
+            f"birthday: {self.birthday or 'N/A'}; address: {self.address or 'N/A'}; "
+            f"email: {'; '.join(email.value for email in self.emails) or 'N/A'}"
         )
 
 

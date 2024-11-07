@@ -6,11 +6,15 @@ from rich.console import Console
 from actions import (
     add_address,
     add_birthday,
+    add_email,
     birthdays,
     change_contact,
+    edit_email,
     remove_contact,
+    remove_email,
     show_all,
     show_birthday,
+    show_email,
     show_phone,
 )
 from address_book import AddressBook
@@ -71,6 +75,14 @@ def main():
                 print(birthdays(book))
             elif command == "add-address":
                 print(add_address(args, book))
+            elif command == "add-email":
+                print(add_email(args, book))
+            elif command == "edit-email":
+                print(edit_email(args, book))
+            elif command == "remove-email":
+                print(remove_email(args, book))
+            elif command == "show-email":
+                print(show_email(args, book))
             else:
                 print("Invalid command.")
         except InputArgsError as input_args_error:
