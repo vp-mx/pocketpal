@@ -38,6 +38,6 @@ profile = "black"
 
 [tool.pylint]
 ignore = ["venv", ".venv", ".*"]
-disable = ["too-few-public-methods", "too-many-branches"]
+disable = ["too-few-public-methods", "too-many-branches", "too-many-statements"]
 init-hook = "import sys; sys.path.append('./src')"
 max-line-length = 120
