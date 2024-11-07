@@ -41,7 +41,7 @@ def remove_contact(args: list[str], book: "AddressBook") -> str:
 
 
 @input_error
-def change_contact(args: list[str], book: "AddressBook") -> str:
+def change_phone(args: list[str], book: "AddressBook") -> str:
     """Changes the phone number of a contact in the address book.
 
     param: args: List with 3 values: name, old phone, new phone.
@@ -65,10 +65,11 @@ def show_phone(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to read from.
     return: str: Result message.
     """
+    name = args[0]
     if len(args) != 1:
         return "Invalid command format. Use: phone [name]"
-    if record := book.find(args[0]):
-        return record.all_phones
+    if record := book.find(name):
+        return f"{name}'s phones: {record.all_phones}"
     return "Contact not found."
 
 
@@ -167,8 +168,10 @@ def edit_email(args, book):
     param: book: AddressBook object to read from.
     return: str: Result message.
     """
-    name, old_email, new_email = args
+    if len(args) != 3:
+        return "Invalid command format. Use: edit-email [name] [old email] [new email]"
 
+    name, old_email, new_email = args
     record = book.find(name)
     if record:
         record.edit_email(old_email, new_email)
@@ -190,7 +193,7 @@ def remove_email(args, book):
     record = book.find(name)
     if record:
         record.remove_email(email)
-        return f"Email '{email}' was successfully deleted for contact '{name}'."
+        return f"Email '{email}' was successfully removed from contact '{name}'."
 
     return f"Contact '{name}' doesn't exist."
 

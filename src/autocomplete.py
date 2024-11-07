@@ -5,25 +5,6 @@ from prompt_toolkit.document import Document
 
 from commands import Commands
 
-commands = [
-    "hello",
-    "menu",
-    "phone",
-    "change",
-    "all",
-    # Email-related commands
-    "add-email",
-    "edit-email",
-    "remove-email",
-    "show-email",
-    # Birthday-related commands
-    "add-birthday",
-    "show-birthday",
-    "birthdays",
-    # Address-related commands
-    "add-address",
-] + Commands.get_commands_list()
-
 
 class CommandCompleter(Completer):
     """
@@ -44,6 +25,6 @@ class CommandCompleter(Completer):
         if len(document.text.split()) > 1:
             return
 
-        for command in commands:
+        for command in Commands.get_commands_list():
             if command.startswith(document.text):
                 yield Completion(command, start_position=-len(document.text))

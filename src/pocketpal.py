@@ -3,20 +3,6 @@
 from prompt_toolkit import PromptSession
 from rich.console import Console
 
-from actions import (
-    add_address,
-    add_birthday,
-    add_email,
-    birthdays,
-    change_contact,
-    edit_email,
-    remove_contact,
-    remove_email,
-    show_all,
-    show_birthday,
-    show_email,
-    show_phone,
-)
 from address_book import AddressBook
 from autocomplete import CommandCompleter
 from commands import Commands, Source
@@ -57,32 +43,6 @@ def main():
                 print(command_object.value.run(args, object_to_modify))
                 if command_object in (Commands.EXIT, Commands.CLOSE):
                     raise ExitApp
-            elif command == "hello":
-                print("How can I help you?")
-            elif command == "change":
-                print(change_contact(args, book))
-            elif command == "remove":
-                print(remove_contact(args, book))
-            elif command == "phone":
-                print(show_phone(args, book))
-            elif command == "all":
-                print(show_all(book))
-            elif command == "add-birthday":
-                print(add_birthday(args, book))
-            elif command == "show-birthday":
-                print(show_birthday(args, book))
-            elif command == "birthdays":
-                print(birthdays(book))
-            elif command == "add-address":
-                print(add_address(args, book))
-            elif command == "add-email":
-                print(add_email(args, book))
-            elif command == "edit-email":
-                print(edit_email(args, book))
-            elif command == "remove-email":
-                print(remove_email(args, book))
-            elif command == "show-email":
-                print(show_email(args, book))
             else:
                 print("Invalid command.")
         except InputArgsError as input_args_error:
