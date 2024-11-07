@@ -211,7 +211,8 @@ def search_by_partial_name(args, book):
                 '; '.join(email.value for email in record.emails) or 'N/A'}"
             for record in records
         )
-    return f"Contacts with '{partial_name}' in name doesn't exist."
+
+    return f"Contacts with '{partial_name}' in name don't exist."
 
 
 @input_error
