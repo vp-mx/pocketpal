@@ -2,7 +2,9 @@
 
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
+
+from rich.table import Table
 
 from actions import (
     add_address,
@@ -21,6 +23,7 @@ from actions import (
     show_phone,
 )
 from error_handlers import InputArgsError
+from visualisation import get_commands_table
 
 
 class Source(Enum):
@@ -28,6 +31,7 @@ class Source(Enum):
 
     ADDRESS_BOOK = auto()
     NOTES = auto()
+    APP = auto()
 
 
 @dataclass
@@ -36,7 +40,7 @@ class Command:
 
     cli_name: str
     description: str
-    run: Callable[[...], str]
+    run: Callable[..., Union[str, Table]]
     args_len: int
     input_help: str
     source: Source
@@ -61,7 +65,7 @@ class Commands(Enum):
         description="Adds a contact to the address book.",
         run=add_contact,
         args_len=2,
-        input_help="add [name] [phone]",
+        input_help="add <name> <phone>",
         source=Source.ADDRESS_BOOK,
     )
     ADD_ADDRESS = Command(
@@ -69,7 +73,7 @@ class Commands(Enum):
         description="Adds an address to a contact.",
         run=add_address,
         args_len=2,
-        input_help="add-address [name] [address]",
+        input_help="add-address <name> <address>",
         source=Source.ADDRESS_BOOK,
     )
     ADD_BIRTHDAY = Command(
@@ -77,7 +81,7 @@ class Commands(Enum):
         description="Adds a birthday to a contact.",
         run=add_birthday,
         args_len=2,
-        input_help="add-birthday [name] [birthday]",
+        input_help="add-birthday <name> <birthday>",
         source=Source.ADDRESS_BOOK,
     )
     ADD_EMAIL = Command(
@@ -85,15 +89,15 @@ class Commands(Enum):
         description="Adds an email to a contact.",
         run=add_email,
         args_len=2,
-        input_help="add-email [name] [email]",
+        input_help="add-email <name> <email>",
         source=Source.ADDRESS_BOOK,
     )
     BIRTHDAYS = Command(
         cli_name="birthdays",
         description="Shows upcoming birthdays.",
         run=birthdays,
-        args_len=0,
-        input_help="birthdays",
+        args_len=1,
+        input_help="birthdays <days_interval>",
         source=Source.ADDRESS_BOOK,
     )
     CHANGE_PHONE = Command(
@@ -101,13 +105,13 @@ class Commands(Enum):
         description="Changes contact's phone.",
         run=change_phone,
         args_len=3,
-        input_help="change [name] [old_phone] [new_phone]",
+        input_help="change <name> <old_phone> <new_phone>",
         source=Source.ADDRESS_BOOK,
     )
     CLOSE = Command(
         cli_name="close",
         description="Closes the assistant bot.",
-        run=lambda *_: "Good bye!",
+        run=lambda: "Good bye!",
         args_len=0,
         input_help="close",
         source=Source.ADDRESS_BOOK,
@@ -115,7 +119,7 @@ class Commands(Enum):
     EXIT = Command(
         cli_name="exit",
         description="Exits the assistant bot.",
-        run=lambda *_: "Good bye!",
+        run=lambda: "Good bye!",
         args_len=0,
         input_help="exit",
         source=Source.ADDRESS_BOOK,
@@ -125,7 +129,7 @@ class Commands(Enum):
         description="Edits the email of a contact.",
         run=edit_email,
         args_len=3,
-        input_help="edit-email [name] [old_email] [new_email]",
+        input_help="edit-email <name> <old_email> <new_email>",
         source=Source.ADDRESS_BOOK,
     )
     SEARCH_BY_PARTIAL_NAME = Command(
@@ -133,7 +137,7 @@ class Commands(Enum):
         description="Searches for contacts by partial name.",
         run=search_by_partial_name,
         args_len=1,
-        input_help="search [partial_name]",
+        input_help="search <partial_name>",
         source=Source.ADDRESS_BOOK,
     )
     HELLO = Command(
@@ -142,14 +146,14 @@ class Commands(Enum):
         run=lambda *_: "How can I help you?",
         args_len=0,
         input_help="hello",
-        source=None,
+        source=Source.APP,
     )
     REMOVE_CONTACT = Command(
         cli_name="remove",
         description="Removes a contact from the address book.",
         run=remove_contact,
         args_len=1,
-        input_help="remove [name]",
+        input_help="remove <name>",
         source=Source.ADDRESS_BOOK,
     )
     REMOVE_EMAIL = Command(
@@ -157,13 +161,13 @@ class Commands(Enum):
         description="Removes the email of a contact.",
         run=remove_email,
         args_len=2,
-        input_help="remove-email [name] [email]",
+        input_help="remove-email <name> <email>",
         source=Source.ADDRESS_BOOK,
     )
     SHOW_ALL = Command(
         cli_name="all",
         description="Shows all contacts in the address book.",
-        run=lambda args, book: show_all(book),
+        run=show_all,
         args_len=0,
         input_help="all",
         source=Source.ADDRESS_BOOK,
@@ -173,7 +177,7 @@ class Commands(Enum):
         description="Shows the birthday of a contact.",
         run=show_birthday,
         args_len=1,
-        input_help="show-birthday [name]",
+        input_help="show-birthday <name>",
         source=Source.ADDRESS_BOOK,
     )
     SHOW_EMAIL = Command(
@@ -181,7 +185,7 @@ class Commands(Enum):
         description="Shows the email of a contact.",
         run=show_email,
         args_len=1,
-        input_help="show-email [name]",
+        input_help="show-email <name>",
         source=Source.ADDRESS_BOOK,
     )
     SHOW_PHONE = Command(
@@ -189,8 +193,16 @@ class Commands(Enum):
         description="Shows the phone number of a contact.",
         run=show_phone,
         args_len=1,
-        input_help="phone [name]",
+        input_help="phone <name>",
         source=Source.ADDRESS_BOOK,
+    )
+    HELP = Command(
+        cli_name="help",
+        description="Shows the list of available commands.",
+        run=lambda: get_commands_table(Commands),
+        args_len=0,
+        input_help="help",
+        source=Source.APP,
     )
 
     @classmethod
@@ -198,7 +210,7 @@ class Commands(Enum):
         """Returns the command based on the cli command name.
 
         param: command_name: The name of the command.
-        return: Optional[Command]: The command object.
+        return: Optional<Command>: The command object.
         """
         for command in cls:
             if command.value.cli_name == command_name:
@@ -209,6 +221,6 @@ class Commands(Enum):
     def get_commands_list(cls) -> list[str]:
         """Returns a list of all the command names.
 
-        return: list[str]: List of command names.
+        return: list<str>: List of command names.
         """
         return [command.value.cli_name for command in cls]

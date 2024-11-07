@@ -12,6 +12,14 @@ class ExitApp(BaseException):
     """Exception for exit from app"""
 
 
+class InternalError(BaseException):
+    """Exception for managing internal errors"""
+
+    def __init__(self) -> None:
+        self.message = "Oops! Something went wrong. Ping the developer to fix it."
+        super().__init__(self.message)
+
+
 class InputArgsError(BaseException):
     """Base exception for helper errors."""
 
