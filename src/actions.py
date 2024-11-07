@@ -214,26 +214,44 @@ def search_by_partial_name(args, book):
     return f"Contacts with '{partial_name}' in name doesn't exist."
 
 
-def add_note(args: list[str], book: "AddressBook", notes_book: "NoteBook") -> str:
-    """Adds a note to a contact in the address book.
+def search_by_partial_name(args, book):
+    """Searches for contacts by partial name.
+
+    param: args: 1 value: the partial name to search.
+    param: book: AddressBook object to search in.
+    return: str: Result message.
+    """
+    partial_name = args[0]
+    if records := book.search_by_partial_name(partial_name):
+        return "\n".join(
+            f"Contact name: {record.name}; "
+            f"phone: {record.all_phones}; "
+            f"birthday: {record.birthday or 'N/A'}; "
+            f"address: {record.address or 'N/A'}; "
+            f"email: {
+                '; '.join(email.value for email in record.emails) or 'N/A'}"
+            for record in records
+        )
+    return f"Contacts with '{partial_name}' in name doesn't exist."
+
+
+@input_error
+def add_note(args: list[str], notes_book: "NoteBook") -> str:
+    """Adds a note to a contact in the notes book.
 
     param: args: List with 2 values: name and note.
-    param: book: AddressBook object to modify.
     param: notes_book: NoteBook object to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: add-note [name] [note]"
+
     name, note = args
-    if record := book.find(name):
-        note_title = f"note-{len(notes_book.values())}"
-        record.add_note(note_title)
-        notes_book.add(note_title, note)
-        notes_book.attach_to_contact(note_title, name)
-        return "Note added."
-    return "Contact not found."
+    note_title: str = f"note-{len(notes_book.values())+1}"
+    notes_book.add(note_title, note)
+    notes_book.attach_to_contact(note_title, name)
+    return "Note added."
 
 
+@input_error
 def edit_note(args: list[str], notes_book: "NoteBook") -> str:
     """Edits a note in the notes dictionary.
 
@@ -241,8 +259,7 @@ def edit_note(args: list[str], notes_book: "NoteBook") -> str:
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: edit-note [note title] [new body]"
+
     note_title, new_body = args
     if note_in_notebook := notes_book.find(note_title):
         notes_book.edit(note_title, new_body)
@@ -250,15 +267,14 @@ def edit_note(args: list[str], notes_book: "NoteBook") -> str:
     return "Note not found."
 
 
+@input_error
 def replace_note(args: list[str], notes_book: "NoteBook") -> str:
-    """Edits a note in the notes dictionary.
+    """Replaces a note_body in the notes dictionary.
 
     param: args: List with 2 values: note title and new body.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: replace-note [note title] [new body]"
     note_title, new_body = args
     if note_in_notebook := notes_book.find(note_title):
         notes_book.replace(note_title, new_body)
@@ -266,7 +282,7 @@ def replace_note(args: list[str], notes_book: "NoteBook") -> str:
     return "Note not found."
 
 
-def show_all_notes(notes_book: "NoteBook") -> str:
+def show_notes(notes_book: "NoteBook") -> str:
     """Shows all notes from the notes dictionary.
 
     param: notes_book: Notes dictionary to read from.
@@ -275,7 +291,8 @@ def show_all_notes(notes_book: "NoteBook") -> str:
     return notes_book.show_all()
 
 
-def show_all_notes_contact(name: str, notes_book: "NoteBook") -> str:
+@input_error
+def show_notes_contact(name: str, notes_book: "NoteBook") -> str:
     """Shows all notes from the notes dictionary.
 
     param: notes_book: Notes dictionary to read from.
@@ -284,16 +301,14 @@ def show_all_notes_contact(name: str, notes_book: "NoteBook") -> str:
     return notes_book.show_all_for_contact(name)
 
 
-def add_note_tag(args: list[str], notes_book: "NoteBook") -> str:
+@input_error
+def add_tag(args: list[str], notes_book: "NoteBook") -> str:
     """Adds a tag to a note in the notes dictionary.
 
     param: args: List with 2 values: note title and tag.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: add-tag [note title] [tag]"
-
     note_title, tag = args
     if note_in_notebook := notes_book.find(note_title):
         notes_book.add_tag(note_title, tag)
@@ -301,15 +316,14 @@ def add_note_tag(args: list[str], notes_book: "NoteBook") -> str:
     return "Note not found."
 
 
-def remove_note_tag(args: list[str], notes_book: "NoteBook") -> str:
+@input_error
+def remove_tag(args: list[str], notes_book: "NoteBook") -> str:
     """Removes a tag from a note in the notes dictionary.
+
     param: args: List with 2 values: note title and tag.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: remove-tag [note title] [tag]"
-
     note_title, tag = args
     if note_in_notebook := notes_book.find(note_title):
         notes_book.remove_tag(note_title, tag)
@@ -317,14 +331,14 @@ def remove_note_tag(args: list[str], notes_book: "NoteBook") -> str:
     return "Note not found."
 
 
-def attach_to_contact(args: list[str], notes_book: "NoteBook") -> str:
+@input_error
+def attach_note(args: list[str], notes_book: "NoteBook") -> str:
     """Attaches a note to a contact in the notes dictionary.
+
     param: args: List with 2 values: note title and contact name.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: attach-to-contact [note title] [contact name]"
 
     note_title, contact_name = args
     if note_in_notebook := notes_book.find(note_title):
@@ -333,40 +347,69 @@ def attach_to_contact(args: list[str], notes_book: "NoteBook") -> str:
     return "Note not found."
 
 
-def search_in_notes(args: list[str], notes_book: "NoteBook") -> str:
+def search_notes(query: str, notes_book: "NoteBook") -> str:
     """Searches for notes containing the query in their title or body.
 
-    param: args: List with 1 value: query.
+    param: query: str: The query to search for.
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
-    if len(args) != 1:
-        return "Invalid command format. Use: search [query]"
-    return notes_book.search(args[0])
+
+    return notes_book.search(query)
 
 
-def delete_note(args: list[str], notes_book: "NoteBook") -> str:
+def delete_note(note_title: str, notes_book: "NoteBook") -> str:
     """Deletes a note from the notes dictionary.
 
-    param: args: List with 1 value: note title.
+    param: note_title: str: The title of the note to delete.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    if len(args) != 1:
-        return "Invalid command format. Use: delete-note [note title]"
-    if note_in_notebook := notes_book.find(args[0]):
-        notes_book.delete(args[0])
+
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.delete(note_title)
+
         return f"Note {note_in_notebook.title} deleted."
     return "Note not found."
 
 
-def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
+def find_by_tag(tag: str, notes_book: "NoteBook") -> list[str]:
     """Finds all notes with a specific tag.
 
-    param: args: List with 1 value: tag.
+    param: tag: str.
     param: notes_book: Notes dictionary to read from.
     return: list: Result message.
     """
-    if len(args) != 1:
-        return "Invalid command format. Use: find-by-tag [tag]"
-    return notes_book.find_by_tag(args[0])
+
+    return notes_book.find_by_tag(tag)
+
+
+def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
+    """Sorts notes by tag.
+
+    param: tag: str: The tag to sort by.
+    param: notes_book: Notes dictionary to read from.
+    return: str: Result message.
+    """
+
+    return notes_book.sort_by_tag(tag)
+
+
+my_book = AddressBook()
+my_notes = NoteBook()
+
+print(add_contact(["John", "1230000000"], my_book))
+print(add_contact(["John", "4560000000"], my_book))
+print(add_contact(["Alice", "7890000000"], my_book))
+
+print(add_note(["John", "This is a note"], my_notes))
+print(add_note(["Alice", "This is another note"], my_notes))
+print(add_tag(["note-1", "notimportant"], my_notes))
+print(add_note(["Alice", "This is a note 3"], my_notes))
+print(add_tag(["note-3", "very "], my_notes))
+print(add_tag(["note-3", "important"], my_notes))
+print(add_tag(["note-2", "important"], my_notes))
+print(add_tag(["note-2", "very"], my_notes))
+# print(show_all_notes(my_notes))
+print(show_notes_contact("Alice", my_notes))
+print(find_by_tag("important", my_notes))

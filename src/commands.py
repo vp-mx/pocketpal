@@ -9,16 +9,28 @@ from actions import (
     add_birthday,
     add_contact,
     add_email,
+    add_note,
+    add_tag,
+    attach_note,
     birthdays,
     change_phone,
+    delete_note,
     edit_email,
+    edit_note,
+    find_by_tag,
     remove_contact,
     remove_email,
     search_by_partial_name,
+    remove_tag,
+    replace_note,
+    search_notes,
     show_all,
     show_birthday,
     show_email,
+    show_notes,
+    show_notes_contact,
     show_phone,
+    sort_by_tag,
 )
 from error_handlers import InputArgsError
 
@@ -191,6 +203,102 @@ class Commands(Enum):
         args_len=1,
         input_help="phone [name]",
         source=Source.ADDRESS_BOOK,
+    )
+    ADD_NOTE = Command(
+        cli_name="add-note",
+        description="Adds a note.",
+        run=add_note,
+        args_len=2,
+        input_help="add-note [name] [note]",
+        source=Source.NOTES,
+    )
+    EDIT_NOTE = Command(
+        cli_name="edit-note",
+        description="Edits a note.",
+        run=edit_note,
+        args_len=2,
+        input_help="edit-note [note_title] [new_body]",
+        source=Source.NOTES,
+    )
+    DELETE_NOTE = Command(
+        cli_name="delete-note",
+        description="Deletes a note.",
+        run=delete_note,
+        args_len=1,
+        input_help="delete-note [note]",
+        source=Source.NOTES,
+    )
+    REPLACE_NOTE = Command(
+        cli_name="replace-note",
+        description="Replaces a note.",
+        run=replace_note,
+        args_len=2,
+        input_help="replace-note [note_title] [new_body]",
+        source=Source.NOTES,
+    )
+    ADD_TAG = Command(
+        cli_name="add-tag",
+        description="Adds a tag to a note.",
+        run=add_tag,
+        args_len=2,
+        input_help="add-tag [note_title] [tag]",
+        source=Source.NOTES,
+    )
+    REMOVE_TAG = Command(
+        cli_name="remove-tag",
+        description="Removes a tag from a note.",
+        run=remove_tag,
+        args_len=2,
+        input_help="remove-tag [note_title] [tag]",
+        source=Source.NOTES,
+    )
+    ATTACH_NOTE = Command(
+        cli_name="attach-note",
+        description="Attaches a note to a contact.",
+        run=attach_note,
+        args_len=2,
+        input_help="attach-note [note_tittle] [contact_name]",
+        source=Source.NOTES,
+    )
+    SHOW_NOTES = Command(
+        cli_name="show-notes",
+        description="Shows all notes.",
+        run=show_notes,
+        args_len=0,
+        input_help="show-notes",
+        source=Source.NOTES,
+    )
+    SHOW_NOTES_CONTACT = Command(
+        cli_name="show-notes-contact",
+        description="Shows all notes of a contact.",
+        run=show_notes_contact,
+        args_len=1,
+        input_help="show-notes-contact [name]",
+        source=Source.NOTES,
+    )
+    SEARCH_NOTES = Command(
+        cli_name="search-notes",
+        description="Searches notes.",
+        run=search_notes,
+        args_len=1,
+        input_help="search-notes [query]",
+        source=Source.NOTES,
+    )
+    FIND_BY_TAG = Command(
+        cli_name="find-by-tag",
+        description="Finds notes by tag.",
+        run=find_by_tag,
+        args_len=1,
+        input_help="find-by-tag [tag]",
+        source=Source.NOTES,
+    )
+    SORT_BY_TAG = Command(
+        cli_name="sort-by-tag",
+        description="Sorts notes by tag.",
+        run=sort_by_tag,
+        args_len=0,
+        input_help="sort-by-tag[tag]",
+        source=Source.NOTES,
     )
 
     @classmethod
