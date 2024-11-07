@@ -248,6 +248,14 @@ class AddressBook(UserDict):
         """
         return self.data.get(name.strip())
 
+    def search_by_partial_name(self, partial_name):
+        """Finds all contacts that contain the partial name.
+
+        param: partial_name: The part of the name to search for.
+        return: list[Record]: List of matching records.
+        """
+        return [record for name, record in self.data.items() if partial_name.lower() in name.lower()]
+
     def delete(self, name: str) -> None:
         """Delete a record by name.
 
@@ -260,7 +268,7 @@ class AddressBook(UserDict):
             raise HelperError("Record not found") from e
 
     def get_upcoming_birthdays(self, days_interval) -> str:
-        """Returns a list of upcoming birthdays within the next 7 days.
+        """Returns a list of upcoming birthdays within the next N days.
 
         When the birthday falls on a weekend, the congratulation date is moved to the next week.
 

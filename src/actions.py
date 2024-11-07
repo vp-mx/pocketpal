@@ -190,3 +190,23 @@ def show_email(args, book):
             else "; ".join(email.value for email in record.emails)
         )
     return f"Contact '{name}' doesn't exist."
+
+
+def search_by_partial_name(args, book):
+    """Searches for contacts by partial name.
+
+    param: args: 1 value: the partial name to search.
+    param: book: AddressBook object to search in.
+    return: str: Result message.
+    """
+    partial_name = args[0]
+    if records := book.search_by_partial_name(partial_name):
+        return "\n".join(
+            f"Contact name: {record.name}; "
+            f"phone: {record.all_phones}; "
+            f"birthday: {record.birthday or 'N/A'}; "
+            f"address: {record.address or 'N/A'}; "
+            f"email: {'; '.join(email.value for email in record.emails) or 'N/A'}"
+            for record in records
+        )
+    return f"Contacts with '{partial_name}' in name doesn't exist."

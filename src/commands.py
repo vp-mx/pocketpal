@@ -14,6 +14,7 @@ from actions import (
     edit_email,
     remove_contact,
     remove_email,
+    search_by_partial_name,
     show_all,
     show_birthday,
     show_email,
@@ -125,6 +126,14 @@ class Commands(Enum):
         run=edit_email,
         args_len=3,
         input_help="edit-email [name] [old_email] [new_email]",
+        source=Source.ADDRESS_BOOK,
+    )
+    SEARCH_BY_PARTIAL_NAME = Command(
+        cli_name="search",
+        description="Searches for contacts by partial name.",
+        run=search_by_partial_name,
+        args_len=1,
+        input_help="search [partial_name]",
         source=Source.ADDRESS_BOOK,
     )
     HELLO = Command(
