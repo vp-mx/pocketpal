@@ -293,8 +293,7 @@ class AddressBook(UserDict):
         :return: string with upcoming birthdays separated by newlines for each contact.
         """
         today = datetime.today().date()
-        contacts_with_birthdays = [
-            record for record in self.values() if record.birthday is not None]
+        contacts_with_birthdays = [record for record in self.values() if record.birthday is not None]
         upcoming_birthdays = []
 
         for user in contacts_with_birthdays:
