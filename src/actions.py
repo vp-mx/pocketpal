@@ -203,12 +203,13 @@ def search_by_partial_name(args, book):
     partial_name = args[0]
     if records := book.search_by_partial_name(partial_name):
         return "\n".join(
-            f"Contact name: {record.name}; "
-            f"phone: {record.all_phones}; "
-            f"birthday: {record.birthday or 'N/A'}; "
-            f"address: {record.address or 'N/A'}; "
-            f"email: {
-                '; '.join(email.value for email in record.emails) or 'N/A'}"
+            f"Contact name: {record.name}\n"
+            f"Phone: {record.all_phones}\n"
+            f"Birthday: {record.birthday or 'N/A'}\n"
+            f"Address: {record.address or 'N/A'}\n"
+            f"Email: {
+                '; '.join(email.value for email in record.emails) or 'N/A'}\n"
+            + "=" * 30
             for record in records
         )
 
