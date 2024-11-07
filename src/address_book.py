@@ -226,7 +226,7 @@ class Record:
         return (
             f"Contact name: {self.name.value}; phones: {self.all_phones}; "
             f"birthday: {
-                self.birthday or 'N/A'}; notes: {self.notes or 'N/A'}; address: {self.address or 'N/A'}; "
+                self.birthday or 'N/A'}; notes: {self.notes or 'N/A'}; address: {self.address or 'N/A'};"
             f"email: {
                 '; '.join(email.value for email in self.emails) or 'N/A'}"
         )
