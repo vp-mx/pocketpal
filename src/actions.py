@@ -370,30 +370,3 @@ def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
     if len(args) != 1:
         return "Invalid command format. Use: find-by-tag [tag]"
     return notes_book.find_by_tag(args[0])
-
-
-my_book = AddressBook()
-my_notes = NoteBook()
-print(add_contact(["John", "1234567890"], my_book))
-print(add_contact(["Jane", "0987654321"], my_book))
-print(add_note(["Jane", "its note"], my_book, my_notes))
-print(add_note(["John", "another note"], my_book, my_notes))
-print(add_note(["Jane", "pretty  note"], my_book, my_notes))
-print("notebook", show_all_notes(my_notes))
-
-print(edit_note(["note-1", "edited note"], my_notes))
-print(edit_note(["note-1", "2 edited note"], my_notes))
-print(edit_note(["note-1", "3 edited note"], my_notes))
-print(replace_note(["note-1", "replaced note"], my_notes))
-print(add_note_tag(["note-1", "TAGGGGGG"], my_notes))
-print(add_note_tag(["note-1", "tag2"], my_notes))
-print(add_note_tag(["note-1", "tag3"], my_notes))
-print(attach_to_contact(["note-1", "Jane"], my_notes))
-print(attach_to_contact(["note-1", "John"], my_notes))
-print(remove_note_tag(["note-1", "TAGGGGGG"], my_notes))
-print("Jane notes", show_all_notes_contact("Jane", my_notes))
-print("John notes", show_all_notes_contact("John", my_notes))
-print("search", search_in_notes(["pretty"], my_notes))
-
-print(my_book.all_records)
-print(find_by_tag(["tag2"], my_notes))
