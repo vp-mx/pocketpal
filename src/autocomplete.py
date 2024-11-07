@@ -20,6 +20,8 @@ commands = [
     "add-birthday",
     "show-birthday",
     "birthdays",
+    # Address-related commands
+    "add-address",
 ] + Commands.get_commands_list()
 
 

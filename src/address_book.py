@@ -91,6 +91,7 @@ class Record:
         self.name = Name(name.strip())
         self.phones: list[Phone] = []
         self.birthday: Optional[Birthday] = None
+        self.address: Optional[str] = None
 
     @property
     def all_phones(self):
@@ -148,8 +149,17 @@ class Record:
         """
         self.birthday = Birthday(birthday)
 
+    def add_address(self, address: str) -> None:
+        """Add an address to the contact.
+        :param address: The address to add.
+        """
+        self.address = address
+
     def __str__(self) -> str:
-        return f"Contact name: {self.name.value}; phones: {self.all_phones}; birthday: {self.birthday or 'N/A'}"
+        return (
+            f"Contact name: {self.name.value}; phones: {self.all_phones}; "
+            f"birthday: {self.birthday or 'N/A'}; address: {self.address or 'N/A'}"
+        )
 
 
 class AddressBook(UserDict):

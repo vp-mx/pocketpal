@@ -4,6 +4,7 @@ from prompt_toolkit import PromptSession
 from rich.console import Console
 
 from actions import (
+    add_address,
     add_birthday,
     birthdays,
     change_contact,
@@ -68,6 +69,8 @@ def main():
                 print(show_birthday(args, book))
             elif command == "birthdays":
                 print(birthdays(book))
+            elif command == "add-address":
+                print(add_address(args, book))
             else:
                 print("Invalid command.")
         except InputArgsError as input_args_error:
