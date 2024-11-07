@@ -12,8 +12,6 @@ def add_contact(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: add [name] [phone]"
     name, phone = args
     if record := book.find(name):
         record.add_phone(phone)
@@ -32,12 +30,11 @@ def remove_contact(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to modify.
     return: str: Result message.
     """
-    if len(args) != 1:
-        return "Invalid command format. Use: remove [name]"
-    if book.find(args[0]):
-        book.delete(args[0])
+    name = args[0]
+    if book.find(name):
+        book.delete(name)
         return "Contact removed."
-    return "Contact not found."
+    return f"Contact '{name}' doesn't exist."
 
 
 @input_error
@@ -48,13 +45,11 @@ def change_phone(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to modify.
     return: str: Result message.
     """
-    if len(args) != 3:
-        return "Invalid command format. Use: change [name] [old phone] [new phone]"
     name, old_phone, new_phone = args
     if record := book.find(name):
         record.edit_phone(old_phone, new_phone)
         return "Phone number updated."
-    return "Contact not found."
+    return f"Contact '{name}' doesn't exist."
 
 
 @input_error
@@ -66,11 +61,9 @@ def show_phone(args: list[str], book: "AddressBook") -> str:
     return: str: Result message.
     """
     name = args[0]
-    if len(args) != 1:
-        return "Invalid command format. Use: phone [name]"
     if record := book.find(name):
         return f"{name}'s phones: {record.all_phones}"
-    return "Contact not found."
+    return f"Contact '{name}' doesn't exist."
 
 
 def show_all(book: "AddressBook"):
@@ -90,13 +83,11 @@ def add_birthday(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: add-birthday [name] [birthday]"
     name, birthday = args
     if record := book.find(name):
         record.add_birthday(birthday)
         return "Birthday added."
-    return "Contact not found."
+    return f"Contact '{name}' doesn't exist."
 
 
 @input_error
@@ -107,21 +98,21 @@ def show_birthday(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to read from.
     return: str: Result message.
     """
-    if len(args) != 1:
-        return "Invalid command format. Use: show-birthday [name]"
-    if record := book.find(args[0]):
+    name = args[0]
+    if record := book.find(name):
         return str(record.birthday) if record.birthday else "N/A"
-    return "Contact not found."
+    return f"Contact '{name}' doesn't exist."
 
 
 @input_error
-def birthdays(book: "AddressBook") -> str:
+def birthdays(args, book: "AddressBook") -> str:
     """Shows all birthdays in next 7 days.
 
     param: book: AddressBook object to read from.
     return: str: Result message.
     """
-    return book.get_upcoming_birthdays()
+    days_interval = int(args[0])
+    return book.get_upcoming_birthdays(days_interval)
 
 
 @input_error
@@ -131,13 +122,11 @@ def add_address(args: list[str], book: "AddressBook") -> str:
     param: book: AddressBook object to modify.
     return: str: Result message.
     """
-    if len(args) != 2:
-        return "Invalid command format. Use: add-address [name] [address]"
     name, address = args
     if record := book.find(name):
         record.add_address(address)
         return "Address added."
-    return "Contact not found."
+    return f"Contact '{name}' doesn't exist."
 
 
 @input_error
@@ -148,15 +137,10 @@ def add_email(args, book):
     param: book: AddressBook object to read from.
     return: str: Result message.
     """
-
     name, email = args
-
-    record = book.find(name)
-
-    if record:
+    if record := book.find(name):
         record.add_email(email)
         return f"Email '{email}' was successfully added for contact '{name}'."
-
     return f"Contact '{name}' doesn't exist."
 
 
@@ -168,15 +152,10 @@ def edit_email(args, book):
     param: book: AddressBook object to read from.
     return: str: Result message.
     """
-    if len(args) != 3:
-        return "Invalid command format. Use: edit-email [name] [old email] [new email]"
-
     name, old_email, new_email = args
-    record = book.find(name)
-    if record:
+    if record := book.find(name):
         record.edit_email(old_email, new_email)
         return f"Email '{old_email}' was successfully changed to '{new_email}' for contact '{name}'."
-
     return f"Contact '{name}' doesn't exist."
 
 
@@ -189,12 +168,9 @@ def remove_email(args, book):
     return: str: Result message.
     """
     name, email = args
-
-    record = book.find(name)
-    if record:
+    if record := book.find(name):
         record.remove_email(email)
         return f"Email '{email}' was successfully removed from contact '{name}'."
-
     return f"Contact '{name}' doesn't exist."
 
 
@@ -207,13 +183,10 @@ def show_email(args, book):
     return: str: Result message.
     """
     name = args[0]
-
-    record = book.find(name)
-    if record:
+    if record := book.find(name):
         return (
             "Contact doesn't have any emails"
             if not record.emails
             else "; ".join(email.value for email in record.emails)
         )
-
     return f"Contact '{name}' doesn't exist."

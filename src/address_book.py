@@ -259,7 +259,7 @@ class AddressBook(UserDict):
         except KeyError as e:
             raise HelperError("Record not found") from e
 
-    def get_upcoming_birthdays(self) -> str:
+    def get_upcoming_birthdays(self, days_interval) -> str:
         """Returns a list of upcoming birthdays within the next 7 days.
 
         When the birthday falls on a weekend, the congratulation date is moved to the next week.
@@ -277,7 +277,7 @@ class AddressBook(UserDict):
                 greet_date = greet_date.replace(year=today.year + 1)
 
             days_until_greet = greet_date - today
-            if days_until_greet.days <= 7:
+            if days_until_greet.days <= days_interval:
                 if greet_date.isoweekday() in (6, 7):
                     greet_date += timedelta(days=8 - greet_date.isoweekday())
                 congratulation_date = greet_date.strftime("%d.%m.%Y")

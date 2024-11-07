@@ -90,7 +90,7 @@ class Commands(Enum):
     BIRTHDAYS = Command(
         cli_name="birthdays",
         description="Shows upcoming birthdays.",
-        run=lambda args, book: birthdays(book),
+        run=birthdays,
         args_len=0,
         input_help="birthdays",
         source=Source.ADDRESS_BOOK,
