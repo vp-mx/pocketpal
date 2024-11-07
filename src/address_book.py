@@ -197,9 +197,11 @@ class Record:
         if self.emails:
             old_email_obj = Email(old_email)
             if old_email_obj in self.emails:
-                self.emails[self.emails.index(old_email_obj)] = Email(new_email)
+                self.emails[self.emails.index(
+                    old_email_obj)] = Email(new_email)
             else:
-                raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
+                raise HelperError(
+                    f"Email '{old_email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to edit.")
 
     def remove_email(self, email):
@@ -212,7 +214,8 @@ class Record:
                 if i.value == email:
                     self.emails.remove(i)
                     return True
-            raise HelperError(f"Email '{email}' doesn't exist for this contact.")
+            raise HelperError(
+                f"Email '{email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to remove.")
 
     def add_note(self, note_title: str) -> None:
@@ -221,9 +224,6 @@ class Record:
         :param note: The note to add.
         """
         self.notes.append(note_title)
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}(name={self.name.value}, phones={self.phones}, birthday={self.birthday})"
 
 
 class AddressBook(UserDict):
@@ -271,7 +271,8 @@ class AddressBook(UserDict):
         :return: string with upcoming birthdays separated by newlines for each contact.
         """
         today = datetime.today().date()
-        contacts_with_birthdays = [record for record in self.values() if record.birthday is not None]
+        contacts_with_birthdays = [
+            record for record in self.values() if record.birthday is not None]
         upcoming_birthdays = []
 
         for user in contacts_with_birthdays:
