@@ -197,8 +197,8 @@ class Record:
             old_email_obj = Email(old_email)
             if old_email_obj in self.emails:
                 self.emails[self.emails.index(old_email_obj)] = Email(new_email)
-            else:
-                raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
+                return True
+            raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to edit.")
 
     def remove_email(self, email):
