@@ -222,15 +222,8 @@ class Record:
         """
         self.notes.append(note_title)
 
-    def __str__(self) -> str:
-        return (
-            f"Contact name: {self.name.value}; phones: {self.all_phones}; "
-            f"birthday: {self.birthday or 'N/A'};"
-            f"notes: {', '.join(self.notes) if self.notes else 'N/A'};"
-            f"address: {self.address or 'N/A'}; "
-            f"email: {
-                '; '.join(email.value for email in self.emails) or 'N/A'}"
-        )
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name.value}, phones={self.phones}, birthday={self.birthday})"
 
 
 class AddressBook(UserDict):
