@@ -77,6 +77,12 @@ class NoteBook(UserDict):
             return KeyError(f"Note with title {title} not found")
         return self.data[title].replace(new_body)
 
+    def attach_to_contact(self, title: str, contact_name: str) -> None:
+        """Attach a note to a contact."""
+        if not title in self.data:
+            return KeyError(f"Note with title {title} not found")
+        return self.data[title].attach_to_contact(contact_name)
+
     def search(self, query: str) -> List[Note]:
         """Search for notes containing the query in their title or body."""
         if query == "":
