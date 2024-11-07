@@ -1,6 +1,7 @@
 """This module contains the functions to perform actions on the address book."""
 
 from address_book import AddressBook, Record
+from notes import NoteBook
 from error_handlers import input_error
 
 
@@ -217,3 +218,26 @@ def show_email(args, book):
         )
 
     return f"Contact '{name}' doesn't exist."
+
+
+def add_note(args: list[str], book: "AddressBook", notes_book: "NoteBook") -> str:
+    """Adds a note to a contact in the address book.
+
+    param: args: List with 2 values: name and note.
+    param: book: AddressBook object to modify.
+    param: notes_book: NoteBook object to modify.
+    return: str: Result message.
+    """
+    if len(args) != 2:
+        return "Invalid command format. Use: add-note [name] [note]"
+    name, note = args
+
+    if record := book.find(name):
+        note_title = len(notes_book.data) + 1
+
+        record.add_note(note_title)
+        notes_book.add(note_title, note)
+        notes_book.attach_to_contact(note_title, name)
+
+        return "Note added."
+    return "Contact not found."
