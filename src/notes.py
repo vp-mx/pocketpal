@@ -4,6 +4,8 @@ from collections import UserDict
 from datetime import datetime
 from typing import List, Optional
 
+from src.error_handlers import HelperError
+
 
 class Note:
     """Class representing a note."""
@@ -15,12 +17,12 @@ class Note:
         :param title: The title of the note.
         :param body: The body of the note.
         :param tags: A list of tags for the note.
-        :param contacts: A list of contacts if the note is attached to a contact.
+        :param contacts: A set of contacts if the note is attached to a contact.
         """
 
         self.title = title
         self.body = body
-        self.creation_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.creation_date = datetime.now()
         self.tags = tags if tags else []
         self.contacts = contacts if contacts else set()
 
@@ -38,18 +40,29 @@ class Note:
 
     def add_tag(self, tag: str) -> None:
         """Add a tag to the note."""
-        if len(tag) < 0 and len(tag) > 20:
+        if len(tag) < 1 or len(tag) > 20:
             raise ValueError("Tag must be between 1 and 20 characters")
         self.tags.append(tag)
 
     def remove_tag(self, tag: str) -> None:
         """Remove a tag from the note."""
         if tag not in self.tags:
-            raise ValueError(f"Tag {tag} not found")
+            raise HelperError(f"Tag {tag} not found")
         self.tags.remove(tag)
 
     def __repr__(self):
-        return f"{self.title}, {self.body}, {self.tags}, {self.contacts}"
+        tags_str = ", ".join(self.tags) if self.tags else "No tags"
+        contacts_str = ", ".join(sorted(self.contacts)) if self.contacts else "No contacts"
+        return (
+            f"\n{'='*30}\n"
+            f"Note: {self.title}\n"
+            f"Created on: {(self.creation_date).strftime(
+                "%Y-%m-%d %H:%M:%S")}\n"
+            f"Tags: {tags_str}\n"
+            f"Attached to Contacts: {contacts_str}\n"
+            f"Body: {self.body}\n"
+            f"{'='*30}"
+        )
 
 
 class NoteBook(UserDict):
@@ -68,15 +81,15 @@ class NoteBook(UserDict):
         del self.data[title]
 
     def edit(self, title: str, new_body: str) -> None:
-        """Edit the body of an existing note."""
+        """Edit the body of an existing note by adding new text to existing one."""
         if not title in self.data:
-            return KeyError(f"Note with title {title} not found")
+            raise HelperError(f"Note with title {title} not found")
         return self.data[title].edit(new_body)
 
     def replace(self, title: str, new_body: str) -> None:
         """Edit the body of an existing note."""
         if not title in self.data:
-            return KeyError(f"Note with title {title} not found")
+            raise KeyError(f"Note with title {title} not found")
         return self.data[title].replace(new_body)
 
     def attach_to_contact(self, title: str, contact_name: str) -> None:
@@ -110,7 +123,7 @@ class NoteBook(UserDict):
 
     def find(self, title: str) -> Optional[Note]:
         """Find a note in the notebook."""
-        return self.data.get(title)
+        return self.data.get(title) or f"Note with title {title} not found"
 
     def show_all_for_contact(self, contact_name: str) -> List[Note]:
         """Find all notes attached to a contact."""
@@ -122,6 +135,16 @@ class NoteBook(UserDict):
         """Find all notes with a specific tag."""
         notes = [note for note in self.data.values() if tag in note.tags]
         return notes
+
+    def sort_by_tag(self, tag: str) -> List[Note]:
+        """Sort all notes by a specific tag."""
+        if not any(tag in note.tags for note in self.data.values()):
+            raise ValueError(f"No notes found with tag {tag}")
+        with_tag = sorted([note for note in self.data.values() if tag in note.tags], key=lambda x: x.creation_date)
+        without_tag = sorted(
+            [note for note in self.data.values() if tag not in note.tags], key=lambda x: x.creation_date
+        )
+        return with_tag + without_tag
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.data})"
