@@ -6,7 +6,6 @@ from datetime import date, datetime, timedelta
 from typing import Any, Optional
 
 from error_handlers import HelperError
-from src.notes import NoteBook
 
 
 class Field:
@@ -224,19 +223,18 @@ class Record:
                 f"Email '{email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to remove.")
 
-    def add_note(self, note: str) -> None:
+    def add_note(self, note_title: str) -> None:
         """Add a note to the contact.
 
         :param note: The note to add.
         """
-        note_title = len(self.notes) + 1
         self.notes.append(note_title)
 
     def __str__(self) -> str:
         return (
             f"Contact name: {self.name.value}; phones: {self.all_phones}; "
             f"birthday: {
-                self.birthday or 'N/A'}; address: {self.address or 'N/A'}; "
+                self.birthday or 'N/A'}; notes: {self.notes or 'N/A'}; address: {self.address or 'N/A'}; "
             f"email: {
                 '; '.join(email.value for email in self.emails) or 'N/A'}"
         )

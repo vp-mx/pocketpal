@@ -22,7 +22,7 @@ class Note:
         self.body = body
         self.creation_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.tags = tags if tags else []
-        self.contacts = contacts if contacts else []
+        self.contacts = contacts if contacts else set()
 
     def edit(self, new_body: str) -> None:
         """Edit the note by adding something to the body."""
@@ -34,7 +34,7 @@ class Note:
 
     def attach_to_contact(self, contact_name: str) -> None:
         """Attach the note to a contact."""
-        self.contacts.append(contact_name)
+        self.contacts.add(contact_name)
 
     def add_tag(self, tag: str) -> None:
         """Add a tag to the note."""
@@ -44,10 +44,12 @@ class Note:
 
     def remove_tag(self, tag: str) -> None:
         """Remove a tag from the note."""
+        if tag not in self.tags:
+            raise ValueError(f"Tag {tag} not found")
         self.tags.remove(tag)
 
     def __repr__(self):
-        return f"({self.title}, {self.creation_date}, {self.body}, {self.tags}, {self.contacts})"
+        return f"{self.title}, {self.body}, {self.tags}, {self.contacts}"
 
 
 class NoteBook(UserDict):
@@ -80,7 +82,8 @@ class NoteBook(UserDict):
     def attach_to_contact(self, title: str, contact_name: str) -> None:
         """Attach a note to a contact."""
         if not title in self.data:
-            return KeyError(f"Note with title {title} not found")
+            raise KeyError(f"Note with title {title} not found")
+
         return self.data[title].attach_to_contact(contact_name)
 
     def search(self, query: str) -> List[Note]:
@@ -101,15 +104,24 @@ class NoteBook(UserDict):
         """Remove a tag from a note."""
         self.data[title].remove_tag(tag)
 
+    def show_all(self) -> List[Note]:
+        """Show all notes."""
+        return list(self.data.values())
+
+    def find(self, title: str) -> Optional[Note]:
+        """Find a note in the notebook."""
+        return self.data.get(title)
+
+    def show_all_for_contact(self, contact_name: str) -> List[Note]:
+        """Find all notes attached to a contact."""
+        if not any(contact_name in note.contacts for note in self.data.values()):
+            raise ValueError(f"No notes found for contact {contact_name}")
+        return [note for note in self.data.values() if contact_name in note.contacts]
+
+    def find_by_tag(self, tag: str) -> List[Note]:
+        """Find all notes with a specific tag."""
+        notes = [note for note in self.data.values() if tag in note.tags]
+        return notes
+
     def __repr__(self):
         return f"{self.__class__.__name__}({self.data})"
-
-
-my_notebook = NoteBook()
-my_notebook.add("First note", "This is the first note")
-my_notebook.add("Second note", "This is the second note")
-my_notebook.add("Third note", "This is the third note")
-my_notebook.add("Fourth note", "This is the fourth note")
-my_note = Note("Fifth note", "This is the fifth note")
-print(type(my_note))
-print(type(my_notebook.data), my_notebook.data)
