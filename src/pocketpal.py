@@ -1,6 +1,7 @@
 """Main module to run the assistant bot."""
 
 from prompt_toolkit import PromptSession
+from rich.console import Console
 
 from actions import (
     add_birthday,
@@ -36,8 +37,9 @@ def main():
 
     book = load_data(ADDRESS_BOOK_FILE) or AddressBook()
     notes = load_data(NOTES_FILE) or NoteBook()
+    console = Console()
     session = PromptSession(completer=CommandCompleter())
-    print("Welcome to the assistant bot!")
+    console.print("Welcome to the assistant bot!", style="bold green")
     while True:
         try:
             user_input = session.prompt("Enter a command: ")
@@ -69,11 +71,11 @@ def main():
             else:
                 print("Invalid command.")
         except InputArgsError as input_args_error:
-            print(input_args_error)
+            console.print(input_args_error, style="bold red")
         except (KeyboardInterrupt, ExitApp):
             save_data(book, ADDRESS_BOOK_FILE)
             save_data(notes, NOTES_FILE)
-            print("Data saved")
+            console.print("Data saved", style="bold blue")
             break
 
 
