@@ -302,8 +302,7 @@ class AddressBook(UserDict):
                     greet_date += timedelta(days=8 - greet_date.isoweekday())
                 congratulation_date = greet_date.strftime("%d.%m.%Y")
                 upcoming_birthdays.append(
-                    f"Contact name: {user.name.value}, congratulation date: {
-                        congratulation_date}"
+                    (f"Contact name: {user.name.value}, " f"congratulation date: {congratulation_date}")
                 )
 
         return "\n".join(upcoming_birthdays) or "No upcoming birthdays found."
