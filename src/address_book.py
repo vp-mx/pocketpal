@@ -89,8 +89,8 @@ class Email(Field):
         :param value: The email in name@domen.domen format.
         :raises HelperError: If the email format is invalid.
         """
-        if self.validation(value):
-            super().__init__(value)
+        self.validation(value)
+        super().__init__(value)
 
     @staticmethod
     def validation(email):
@@ -102,8 +102,6 @@ class Email(Field):
         """
         if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
             raise HelperError(f"Validation for email '{email}' is declined.")
-
-        return email
 
 
 class Record:
@@ -196,10 +194,10 @@ class Record:
         :return: str: Result message.
         """
         if self.emails:
-            for key, email in enumerate(self.emails):
-                if email.value == old_email:
-                    self.emails[key] = Email(new_email)
-                    return True
+            old_email_obj = Email(old_email)
+            if old_email_obj in self.emails:
+                self.emails[self.emails.index(old_email_obj)] = Email(new_email)
+            else:
                 raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to edit.")
 
