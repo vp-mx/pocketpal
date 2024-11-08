@@ -2,8 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from actions import show_all
-from address_book import AddressBook, Record
+from address_book import AddressBook
 from custom_console import print_to_console
 from error_handlers import NotFoundWarning, input_error
 from notes import NoteBook
@@ -218,18 +217,3 @@ def note_table(note: str) -> None:
     ]
     table = create_rich_table_to_print(columns, data)
     print_to_console(table)
-
-
-my_notes = NoteBook()
-my_address_book = AddressBook()
-me = Record("me")
-add_note(["title", "body", "body", "body"], my_notes)
-add_note(["title2", "bodys", "bodys", "bodys"], my_notes)
-add_note(["title3", "body", "body", "body"], my_notes)
-my_address_book.add_record(me)
-attach_note(["title", "me"], my_notes, my_address_book)
-attach_note(["title2", "me"], my_notes, my_address_book)
-attach_note(["title3", "me"], my_notes, my_address_book)
-show_notes_contact("me", my_notes)
-
-show_all(my_address_book)
