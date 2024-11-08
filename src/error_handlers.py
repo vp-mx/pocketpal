@@ -12,6 +12,10 @@ from visualisation import OutputStyle
 class HelperError(BaseException):
     """Base exception for helper errors."""
 
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
 
 class ExitApp(BaseException):
     """Exception for exit from app"""
