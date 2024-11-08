@@ -4,7 +4,7 @@ from collections import UserDict
 from datetime import datetime
 from typing import List, Optional
 
-from src.error_handlers import HelperError
+from error_handlers import HelperError
 
 
 class Note:
