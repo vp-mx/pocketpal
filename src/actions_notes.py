@@ -93,7 +93,7 @@ def remove_tag(args: list[str], notes_book: "NoteBook") -> None:
 
 
 @input_error
-def attach_note(args: list[str], notes_book: "NoteBook", address_book: "AddressBook") -> None:
+def attach_note(args: list[str], address_book: "AddressBook", notes_book: "NoteBook") -> None:
     """Attaches a note to a contact in the notes dictionary.
 
     param: args: List with 2 values: note title and contact name.
@@ -101,7 +101,8 @@ def attach_note(args: list[str], notes_book: "NoteBook", address_book: "AddressB
     return: str: Result message.
     """
 
-    note_title, contact_name = args
+    note_title = args[0]
+    contact_name = args[1]
     contact = address_book.find(contact_name)
     note = notes_book.find(note_title)
     if not contact or not note:
@@ -162,7 +163,7 @@ def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
 
 
 @input_error
-def add_note(args: list[str, list], notes_book: "NoteBook") -> None:
+def add_note(args: list[str], notes_book: "NoteBook") -> None:
     """Adds a note to a contact in the notes book.
 
     param: args: List with 2 values: name and note. Note is a string with multiple words.
@@ -171,7 +172,7 @@ def add_note(args: list[str, list], notes_book: "NoteBook") -> None:
     """
 
     note_title: str = args[0]
-    note_body = " ".join(args[1 : len(args)])
+    note_body = " ".join(args[1:])
 
     new_note = notes_book.add(note_title, note_body)
     note_table(new_note)
