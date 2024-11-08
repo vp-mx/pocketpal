@@ -53,7 +53,7 @@ class Note:
     def __repr__(self):
         tags_str = ", ".join(self.tags) if self.tags else "No tags"
         contacts_str = ", ".join(sorted(self.contacts)) if self.contacts else "No contacts"
-        creation_date_str = datetime.strptime(self.creation_date, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+        creation_date_str = self.creation_date.strftime("%Y-%m-%d %H:%M:%S")
         return (
             f"\n{'='*30}\n"
             f"Note: {self.title}\n"

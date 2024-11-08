@@ -112,6 +112,30 @@ class Commands(Enum):
         input_help="add-email <name> <email>",
         source=Source.ADDRESS_BOOK,
     )
+    ADD_NOTE = Command(
+        cli_name="add-note",
+        description="Adds a note.",
+        run=add_note,
+        args_len=2,
+        input_help="add-note <name> <note>",
+        source=Source.NOTES,
+    )
+    ADD_TAG = Command(
+        cli_name="add-tag",
+        description="Adds a tag to a note.",
+        run=add_tag,
+        args_len=2,
+        input_help="add-tag <note_title> <tag>",
+        source=Source.NOTES,
+    )
+    ATTACH_NOTE = Command(
+        cli_name="attach-note",
+        description="Attaches a note to a contact.",
+        run=attach_note,
+        args_len=2,
+        input_help="attach-note <note_tittle> <contact_name>",
+        source=Source.NOTES,
+    )
     BIRTHDAYS = Command(
         cli_name="birthdays",
         description="Shows upcoming birthdays.",
@@ -136,13 +160,13 @@ class Commands(Enum):
         input_help="close",
         source=Source.ADDRESS_BOOK,
     )
-    EXIT = Command(
-        cli_name="exit",
-        description="Exits the assistant bot.",
-        run=lambda: "Good bye!",
-        args_len=0,
-        input_help="exit",
-        source=Source.ADDRESS_BOOK,
+    DELETE_NOTE = Command(
+        cli_name="delete-note",
+        description="Deletes a note.",
+        run=delete_note,
+        args_len=1,
+        input_help="delete-note <note>",
+        source=Source.NOTES,
     )
     EDIT_EMAIL = Command(
         cli_name="edit-email",
@@ -152,13 +176,37 @@ class Commands(Enum):
         input_help="edit-email <name> <old_email> <new_email>",
         source=Source.ADDRESS_BOOK,
     )
-    SEARCH_BY_PARTIAL_NAME = Command(
-        cli_name="search",
-        description="Searches for contacts by partial name.",
-        run=search_by_partial_name,
-        args_len=1,
-        input_help="search <partial_name>",
+    EDIT_NOTE = Command(
+        cli_name="edit-note",
+        description="Edits a note.",
+        run=edit_note,
+        args_len=2,
+        input_help="edit-note <note_title> <new_body>",
+        source=Source.NOTES,
+    )
+    EXIT = Command(
+        cli_name="exit",
+        description="Exits the assistant bot.",
+        run=lambda: "Good bye!",
+        args_len=0,
+        input_help="exit",
         source=Source.ADDRESS_BOOK,
+    )
+    FIND_BY_TAG = Command(
+        cli_name="find-by-tag",
+        description="Finds notes by tag.",
+        run=find_by_tag,
+        args_len=1,
+        input_help="find-by-tag <tag>",
+        source=Source.NOTES,
+    )
+    HELP = Command(
+        cli_name="help",
+        description="Shows the list of available commands.",
+        run=lambda: print_commands_table(Commands),
+        args_len=0,
+        input_help="help",
+        source=Source.APP,
     )
     HELLO = Command(
         cli_name="hello",
@@ -184,6 +232,38 @@ class Commands(Enum):
         input_help="remove-email <name> <email>",
         source=Source.ADDRESS_BOOK,
     )
+    REMOVE_TAG = Command(
+        cli_name="remove-tag",
+        description="Removes a tag from a note.",
+        run=remove_tag,
+        args_len=2,
+        input_help="remove-tag <note_title> <tag>",
+        source=Source.NOTES,
+    )
+    REPLACE_NOTE = Command(
+        cli_name="replace-note",
+        description="Replaces a note.",
+        run=replace_note,
+        args_len=2,
+        input_help="replace-note <note_title> <new_body>",
+        source=Source.NOTES,
+    )
+    SEARCH_BY_PARTIAL_NAME = Command(
+        cli_name="search",
+        description="Searches for contacts by partial name.",
+        run=search_by_partial_name,
+        args_len=1,
+        input_help="search <partial_name>",
+        source=Source.ADDRESS_BOOK,
+    )
+    SEARCH_NOTES = Command(
+        cli_name="search-notes",
+        description="Searches notes.",
+        run=search_notes,
+        args_len=1,
+        input_help="search-notes <query>",
+        source=Source.NOTES,
+    )
     SHOW_ALL = Command(
         cli_name="all",
         description="Shows all contacts in the address book.",
@@ -208,78 +288,6 @@ class Commands(Enum):
         input_help="show-email <name>",
         source=Source.ADDRESS_BOOK,
     )
-    SHOW_PHONE = Command(
-        cli_name="phone",
-        description="Shows the phone number of a contact.",
-        run=show_phone,
-        args_len=1,
-        input_help="phone <name>",
-        source=Source.ADDRESS_BOOK,
-    )
-    HELP = Command(
-        cli_name="help",
-        description="Shows the list of available commands.",
-        run=lambda: print_commands_table(Commands),
-        args_len=0,
-        input_help="help",
-        source=Source.APP,
-    )
-    ADD_NOTE = Command(
-        cli_name="add-note",
-        description="Adds a note.",
-        run=add_note,
-        args_len=2,
-        input_help="add-note <name> <note>",
-        source=Source.NOTES,
-    )
-    EDIT_NOTE = Command(
-        cli_name="edit-note",
-        description="Edits a note.",
-        run=edit_note,
-        args_len=2,
-        input_help="edit-note <note_title> <new_body>",
-        source=Source.NOTES,
-    )
-    DELETE_NOTE = Command(
-        cli_name="delete-note",
-        description="Deletes a note.",
-        run=delete_note,
-        args_len=1,
-        input_help="delete-note <note>",
-        source=Source.NOTES,
-    )
-    REPLACE_NOTE = Command(
-        cli_name="replace-note",
-        description="Replaces a note.",
-        run=replace_note,
-        args_len=2,
-        input_help="replace-note <note_title> <new_body>",
-        source=Source.NOTES,
-    )
-    ADD_TAG = Command(
-        cli_name="add-tag",
-        description="Adds a tag to a note.",
-        run=add_tag,
-        args_len=2,
-        input_help="add-tag <note_title> <tag>",
-        source=Source.NOTES,
-    )
-    REMOVE_TAG = Command(
-        cli_name="remove-tag",
-        description="Removes a tag from a note.",
-        run=remove_tag,
-        args_len=2,
-        input_help="remove-tag <note_title> <tag>",
-        source=Source.NOTES,
-    )
-    ATTACH_NOTE = Command(
-        cli_name="attach-note",
-        description="Attaches a note to a contact.",
-        run=attach_note,
-        args_len=2,
-        input_help="attach-note <note_tittle> <contact_name>",
-        source=Source.NOTES,
-    )
     SHOW_NOTES = Command(
         cli_name="show-notes",
         description="Shows all notes.",
@@ -296,28 +304,20 @@ class Commands(Enum):
         input_help="show-notes-contact <name>",
         source=Source.NOTES,
     )
-    SEARCH_NOTES = Command(
-        cli_name="search-notes",
-        description="Searches notes.",
-        run=search_notes,
+    SHOW_PHONE = Command(
+        cli_name="phone",
+        description="Shows the phone number of a contact.",
+        run=show_phone,
         args_len=1,
-        input_help="search-notes <query>",
-        source=Source.NOTES,
-    )
-    FIND_BY_TAG = Command(
-        cli_name="find-by-tag",
-        description="Finds notes by tag.",
-        run=find_by_tag,
-        args_len=1,
-        input_help="find-by-tag <tag>",
-        source=Source.NOTES,
+        input_help="phone <name>",
+        source=Source.ADDRESS_BOOK,
     )
     SORT_BY_TAG = Command(
         cli_name="sort-by-tag",
         description="Sorts notes by tag.",
         run=sort_by_tag,
         args_len=0,
-        input_help="sort-by-tag<tag>",
+        input_help="sort-by-tag <tag>",
         source=Source.NOTES,
     )
 
