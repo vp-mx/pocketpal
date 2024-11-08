@@ -52,8 +52,7 @@ class Note:
 
     def __repr__(self):
         tags_str = ", ".join(self.tags) if self.tags else "No tags"
-        contacts_str = ", ".join(sorted(self.contacts)
-                                 ) if self.contacts else "No contacts"
+        contacts_str = ", ".join(sorted(self.contacts)) if self.contacts else "No contacts"
         return (
             f"\n{'='*30}\n"
             f"Note: {self.title}\n"
@@ -143,8 +142,7 @@ class NoteBook(UserDict):
         """Sort all notes by a specific tag."""
         if not any(tag in note.tags for note in self.data.values()):
             raise ValueError(f"No notes found with tag {tag}")
-        with_tag = sorted([note for note in self.data.values(
-        ) if tag in note.tags], key=lambda x: x.creation_date)
+        with_tag = sorted([note for note in self.data.values() if tag in note.tags], key=lambda x: x.creation_date)
         without_tag = sorted(
             [note for note in self.data.values() if tag not in note.tags], key=lambda x: x.creation_date
         )
