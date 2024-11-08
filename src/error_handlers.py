@@ -41,7 +41,7 @@ class NotFoundWarning(BaseException):
     """Exception for not existing object"""
 
     def __init__(self, message: str) -> None:
-        self.message = f"{message} not found."
+        self.message = message
         super().__init__(self.message)
 
 
