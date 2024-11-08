@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 
 from custom_console import print_to_console
 from error_handlers import NotFoundWarning, input_error
+from notes import NoteBook
 from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
     from commands import Commands
-    from notes import NoteBook
 
 
 @input_error
@@ -21,11 +21,8 @@ def edit_note(args: list[str], notes_book: "NoteBook") -> None:
     """
 
     note_title, new_body = args
-    if note_in_notebook := notes_book.find(note_title):
-        notes_book.edit(note_title, new_body)
-        print_to_console(f"Note edited to -{note_in_notebook.body}.", style=OutputStyle.SUCCESS)
-    else:
-        raise NotFoundWarning(f"Note with title '{note_title}'")
+    edited_note = notes_book.edit(note_title, new_body)
+    note_table(edited_note)
 
 
 @input_error
@@ -37,11 +34,9 @@ def replace_note(args: list[str], notes_book: "NoteBook") -> None:
     return: str: Result message.
     """
     note_title, new_body = args
-    note_in_notebook = notes_book.find(note_title)
-    if not note_in_notebook:
-        raise NotFoundWarning(f"Note with title '{note_title}'")
-    notes_book.replace(note_title, new_body)
-    print_to_console(f"Note replaced to -{note_in_notebook.body}.", style=OutputStyle.SUCCESS)
+
+    replaced = notes_book.replace(note_title, new_body)
+    note_table(replaced)
 
 
 def show_notes(notes_book: "NoteBook") -> None:
@@ -50,7 +45,7 @@ def show_notes(notes_book: "NoteBook") -> None:
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
-    print_to_console(notes_book.show_all())
+    notes_table(notes_book.show_all())
 
 
 @input_error
@@ -60,7 +55,7 @@ def show_notes_contact(name: str, notes_book: "NoteBook") -> None:
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
-    print_to_console(str(notes_book.show_all_for_contact(name)))
+    notes_table(notes_book.show_all_for_contact(name))
 
 
 @input_error
@@ -121,7 +116,8 @@ def search_notes(query: str, notes_book: "NoteBook") -> None:
     return: str: Result message.
     """
 
-    print_to_console(str(notes_book.search(query)))
+    search_results = notes_book.search(query)
+    notes_table(search_results)
 
 
 def delete_note(note_title: str, notes_book: "NoteBook") -> None:
@@ -147,7 +143,7 @@ def find_by_tag(tag: str, notes_book: "NoteBook") -> list[str]:
     return: list: Result message.
     """
 
-    print_to_console(notes_book.find_by_tag(tag))
+    notes_table(notes_book.find_by_tag(tag))
 
 
 def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
@@ -157,8 +153,8 @@ def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
-    print_to_console(notes_book.sort_by_tag(tag))
-    return notes_book.sort_by_tag(tag)
+    sorted_notes = notes_book.sort_by_tag(tag)
+    notes_table(sorted_notes)
 
 
 @input_error
@@ -177,13 +173,42 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     print_to_console("Note added.")
 
 
-def print_notes_table(notes_book: "NoteBook") -> None:
-    """Prints a table with all notes.
+def notes_table(list_of_notes: list[str]) -> None:
+    """Prints a list  with all notes.
 
-    param: notes_book: Notes dictionary to read from.
+    param: list_of_notes: List of notes to print.
     return: str: Result message.
     """
     columns = ["Title", "Body", "Tags", "Contacts", "Creation Date"]
-    data = [[note.title, note.body, note.tags, note.contacts, note.creation_date] for note in notes_book.show_all()]
+    data = [
+        [
+            note.title,
+            note.body,
+            ",".join(note.tags) if note.tags else "No Tags",
+            ", ".join(sorted(note.contacts)) if note.contacts else "No contacts",
+            note.creation_date,
+        ]
+        for note in list_of_notes
+    ]
+    table = create_rich_table_to_print(columns, data)
+    print_to_console(table)
+
+
+def note_table(note: str) -> None:
+    """Prints a table with a single note.
+
+    param: note: Note to print.
+    return: str: Result message.
+    """
+    columns = ["Title", "Body", "Tags", "Contacts", "Creation Date"]
+    data = [
+        [
+            note.title,
+            note.body,
+            ",".join(note.tags) if note.tags else "No Tags",
+            ", ".join(sorted(note.contacts)) if note.contacts else "No contacts",
+            note.creation_date,
+        ]
+    ]
     table = create_rich_table_to_print(columns, data)
     print_to_console(table)
