@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from custom_console import print_to_console
 from error_handlers import NotFoundWarning, input_error
-from visualisation import OutputStyle
+from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
     from commands import Commands
@@ -175,3 +175,15 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     notes_book.add(note_title, note)
     notes_book.attach_to_contact(note_title, name)
     print_to_console("Note added.")
+
+
+def print_notes_table(notes_book: "NoteBook") -> None:
+    """Prints a table with all notes.
+
+    param: notes_book: Notes dictionary to read from.
+    return: str: Result message.
+    """
+    columns = ["Title", "Body", "Tags", "Contacts", "Creation Date"]
+    data = [[note.title, note.body, note.tags, note.contacts, note.creation_date] for note in notes_book.show_all()]
+    table = create_rich_table_to_print(columns, data)
+    print_to_console(table)
