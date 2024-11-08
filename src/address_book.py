@@ -321,7 +321,8 @@ class AddressBook(UserDict):
 
         return "\n".join(upcoming_birthdays) or f"No upcoming birthdays found in next {days_interval} days."
 
-me=Record("me")
+
+me = Record("me")
 me.add_phone("1234567890")
 me.add_phone("1234567891")
 me.add_birthday("01.01.2000")
