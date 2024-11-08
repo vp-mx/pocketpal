@@ -46,12 +46,13 @@ def main():
             if command_object in (Commands.EXIT, Commands.CLOSE):
                 raise ExitApp
             command_object.value.validate_args(args)
+            args_len = command_object.value.args_len
             if command_object.value.source == Source.ADDRESS_BOOK:
-                result = command_object.value.run(args, book)
+                result = command_object.value.run(args, book) if args_len else command_object.value.run(book)
             elif command_object.value.source == Source.NOTES:
-                result = command_object.value.run(args, notes)
+                result = command_object.value.run(args, notes) if args_len else command_object.value.run(notes)
             elif command_object.value.source == Source.APP:
-                result = command_object.value.run(args) if command_object.value.args_len else command_object.value.run()
+                result = command_object.value.run(args) if args_len else command_object.value.run()
             else:
                 raise InternalError
             console.print(result)
