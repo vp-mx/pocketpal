@@ -272,7 +272,7 @@ def cleanup(args: list[str]) -> str:
         "notes": [NOTES_FILE],
     }
     if files_to_delete.get(config) is None:
-        raise NotFoundWarning("Invalid config value. Choose from 'all', 'address-book', or 'notes'.")
+        raise NotFoundWarning("Choose from 'all', 'address-book', or 'notes'.")
 
     for file in files_to_delete[config]:
         print(f"Deleting {file}...")
