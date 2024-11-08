@@ -321,7 +321,6 @@ class Commands(Enum):
         source=Source.NOTES,
     )
 
-
     @classmethod
     def get_command(cls, command_name: str) -> Optional["Commands"]:
         """Returns the command based on the cli command name.
