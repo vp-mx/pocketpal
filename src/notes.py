@@ -22,7 +22,7 @@ class Note:
 
         self.title = title
         self.body = body
-        self.creation_date = datetime.now()
+        self.creation_date = datetime.now().date().strftime("%Y-%m-%d")
         self.tags = tags if tags else []
         self.contacts = contacts if contacts else set()
 
@@ -32,6 +32,7 @@ class Note:
 
     def replace(self, new_body: str) -> None:
         """Edit the note by replacing the body."""
+
         self.body = new_body
 
     def attach_to_contact(self, contact_name: str) -> None:
@@ -53,15 +54,12 @@ class Note:
     def __repr__(self):
         tags_str = ", ".join(self.tags) if self.tags else "No tags"
         contacts_str = ", ".join(sorted(self.contacts)) if self.contacts else "No contacts"
-        creation_date_str = self.creation_date.strftime("%Y-%m-%d %H:%M:%S")
         return (
-            f"\n{'='*30}\n"
             f"Note: {self.title}\n"
-            f"Created on: {creation_date_str}\n"
+            f"Created: {self.creation_date}\n"
             f"Tags: {tags_str}\n"
             f"Attached to Contacts: {contacts_str}\n"
             f"Body: {self.body}\n"
-            f"{'='*30}"
         )
 
 
@@ -84,13 +82,15 @@ class NoteBook(UserDict):
         """Edit the body of an existing note by adding new text to existing one."""
         if not title in self.data:
             raise HelperError(f"Note with title {title} not found")
-        return self.data[title].edit(new_body)
+        self.data[title].edit(new_body)
+        return self.data[title]
 
     def replace(self, title: str, new_body: str) -> None:
         """Edit the body of an existing note."""
         if not title in self.data:
             raise KeyError(f"Note with title {title} not found")
-        return self.data[title].replace(new_body)
+        self.data[title].replace(new_body)
+        return self.data[title]
 
     def attach_to_contact(self, title: str, contact_name: str) -> None:
         """Attach a note to a contact."""
@@ -119,7 +119,7 @@ class NoteBook(UserDict):
 
     def show_all(self) -> List[Note]:
         """Show all notes."""
-        return list(self.data.values())
+        return self.data.values()
 
     def find(self, title: str) -> Optional[Note]:
         """Find a note in the notebook."""
@@ -133,8 +133,9 @@ class NoteBook(UserDict):
 
     def find_by_tag(self, tag: str) -> List[Note]:
         """Find all notes with a specific tag."""
-        notes = [note for note in self.data.values() if tag in note.tags]
-        return notes
+        if not any(tag in note.tags for note in self.data.values()):
+            raise ValueError(f"No notes found with tag {tag}")
+        return [note for note in self.data.values() if tag in note.tags]
 
     def sort_by_tag(self, tag: str) -> List[Note]:
         """Sort all notes by a specific tag."""
