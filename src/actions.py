@@ -207,7 +207,8 @@ def search_by_partial_name(args, book):
             f"Phone: {record.all_phones}\n"
             f"Birthday: {record.birthday or 'N/A'}\n"
             f"Address: {record.address or 'N/A'}\n"
-            f"Email: {'; '.join(email.value for email in record.emails) or 'N/A'}\n" + "=" * 30
+            f"Email: {
+                '; '.join(email.value for email in record.emails) or 'N/A'}\n" + "=" * 30
             for record in records
         )
 
@@ -267,6 +268,7 @@ def show_notes(notes_book: "NoteBook") -> str:
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
+    print(notes_book.show_all())
     return notes_book.show_all()
 
 
@@ -360,6 +362,7 @@ def find_by_tag(tag: str, notes_book: "NoteBook") -> list[str]:
     return: list: Result message.
     """
 
+    print(notes_book.find_by_tag(tag))
     return notes_book.find_by_tag(tag)
 
 
@@ -370,5 +373,14 @@ def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
-
+    print(notes_book.sort_by_tag(tag))
     return notes_book.sort_by_tag(tag)
+
+
+my_notes = NoteBook()
+
+add_note(["John", "This is a note"], my_notes)
+add_note(["John", "This is another note"], my_notes)
+add_tag(["note-1", "important"], my_notes)
+add_tag(["note-2", "urgent"], my_notes)
+find_by_tag("important", my_notes)

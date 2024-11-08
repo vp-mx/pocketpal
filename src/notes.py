@@ -22,7 +22,7 @@ class Note:
 
         self.title = title
         self.body = body
-        self.creation_date = datetime.now()
+        self.creation_date = datetime.now().date()
         self.tags = tags if tags else []
         self.contacts = contacts if contacts else set()
 
@@ -52,12 +52,12 @@ class Note:
 
     def __repr__(self):
         tags_str = ", ".join(self.tags) if self.tags else "No tags"
-        contacts_str = ", ".join(sorted(self.contacts)) if self.contacts else "No contacts"
-        creation_date_str = datetime.strptime(self.creation_date, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+        contacts_str = ", ".join(sorted(self.contacts)
+                                 ) if self.contacts else "No contacts"
         return (
             f"\n{'='*30}\n"
             f"Note: {self.title}\n"
-            f"Created on: {creation_date_str}\n"
+            f"Created on: {self.creation_date}\n"
             f"Tags: {tags_str}\n"
             f"Attached to Contacts: {contacts_str}\n"
             f"Body: {self.body}\n"
@@ -133,14 +133,18 @@ class NoteBook(UserDict):
 
     def find_by_tag(self, tag: str) -> List[Note]:
         """Find all notes with a specific tag."""
-        notes = [note for note in self.data.values() if tag in note.tags]
-        return notes
+        notes = []
+        for note in self.data.values():
+            if tag in note.tags:
+                notes.append(note)
+            return notes
 
     def sort_by_tag(self, tag: str) -> List[Note]:
         """Sort all notes by a specific tag."""
         if not any(tag in note.tags for note in self.data.values()):
             raise ValueError(f"No notes found with tag {tag}")
-        with_tag = sorted([note for note in self.data.values() if tag in note.tags], key=lambda x: x.creation_date)
+        with_tag = sorted([note for note in self.data.values(
+        ) if tag in note.tags], key=lambda x: x.creation_date)
         without_tag = sorted(
             [note for note in self.data.values() if tag not in note.tags], key=lambda x: x.creation_date
         )
