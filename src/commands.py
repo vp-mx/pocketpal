@@ -4,7 +4,9 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Callable, Optional, Union
 
+from rich.panel import Panel
 from rich.table import Table
+from rich.text import Text
 
 from actions import (
     add_address,
@@ -20,6 +22,7 @@ from actions import (
     edit_email,
     edit_note,
     find_by_tag,
+    print_commands_table,
     remove_contact,
     remove_email,
     remove_tag,
@@ -35,7 +38,6 @@ from actions import (
     sort_by_tag,
 )
 from error_handlers import InputArgsError
-from visualisation import get_commands_table
 
 
 class Source(Enum):
@@ -51,11 +53,17 @@ class Command:
     """Dataclass to store command information."""
 
     cli_name: str
+    """The name of the command for input from CLI."""
     description: str
-    run: Callable[..., Union[str, Table]]
+    """Description of the command."""
+    run: Callable[..., Union[str, Table, Text, Panel]]
+    """Function to run the command."""
     args_len: int
+    """Number of arguments for command. 0, the command does not receive arguments. -1 means any number of arguments."""
     input_help: str
+    """Help message for the command with the correct input format."""
     source: Source
+    """Source where to apply the command."""
 
     def validate_args(self, args: Optional[list[str]] = None):
         """Validates the number of arguments.
@@ -63,7 +71,7 @@ class Command:
         param: args: List of arguments.
         raises: InputArgsError: If the number of arguments is incorrect.
         """
-        if args is None and self.args_len == 0:
+        if (args is None and self.args_len == 0) or self.args_len < 0:
             return
         if args is None or len(args) != self.args_len:
             raise InputArgsError(self.input_help)
@@ -108,7 +116,7 @@ class Commands(Enum):
         cli_name="birthdays",
         description="Shows upcoming birthdays.",
         run=birthdays,
-        args_len=1,
+        args_len=-1,
         input_help="birthdays <days_interval>",
         source=Source.ADDRESS_BOOK,
     )
@@ -211,7 +219,7 @@ class Commands(Enum):
     HELP = Command(
         cli_name="help",
         description="Shows the list of available commands.",
-        run=lambda: get_commands_table(Commands),
+        run=lambda: print_commands_table(Commands),
         args_len=0,
         input_help="help",
         source=Source.APP,
