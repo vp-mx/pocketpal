@@ -1,13 +1,13 @@
 """Main module to run the assistant bot."""
 
 from prompt_toolkit import PromptSession
-from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
 from address_book import AddressBook
 from autocomplete import CommandCompleter
 from commands import Commands, Source
+from custom_console import console
 from error_handlers import ExitApp, InputArgsError, InternalError
 from file_operations import ADDRESS_BOOK_FILE, NOTES_FILE, load_data, save_data
 from notes import NoteBook
@@ -30,9 +30,8 @@ def main():
 
     book = load_data(ADDRESS_BOOK_FILE) or AddressBook()
     notes = load_data(NOTES_FILE) or NoteBook()
-    console = Console()
     session = PromptSession(completer=CommandCompleter())
-    console.print(Panel("Welcome to the assistant bot!"), style="bold green")
+    console.print(Panel(":wave: Welcome to the assistant bot!", expand=False), style="bold green")
     while True:
         try:
             user_input = session.prompt("Enter a command: ")
@@ -55,7 +54,8 @@ def main():
                 result = command_object.value.run(args) if args_len else command_object.value.run()
             else:
                 raise InternalError
-            console.print(result)
+            if result:
+                console.print(result)
         except (InputArgsError, InternalError) as error:
             console.print(Text(str(error), style="bold red"))
         except (KeyboardInterrupt, ExitApp):

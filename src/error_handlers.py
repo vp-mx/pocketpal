@@ -1,7 +1,12 @@
 """Module to handle errors in the helper functions."""
 
 from functools import wraps
-from typing import Callable
+from typing import Callable, Optional, Union
+
+from rich.text import Text
+
+from custom_console import print_to_console
+from visualisation import OutputStyle
 
 
 class HelperError(BaseException):
@@ -28,18 +33,29 @@ class InputArgsError(BaseException):
         super().__init__(self.message)
 
 
-def input_error(func: Callable[..., str]) -> Callable[..., str]:
+class NotFoundWarning(BaseException):
+    """Exception for not existing object"""
+
+    def __init__(self, message: str) -> None:
+        self.message = f"{message} not found."
+        super().__init__(self.message)
+
+
+def input_error(func: Callable[..., Union[str, "Text"]]) -> Callable[..., Union[str, "Text"]]:
     """Decorator to handle errors in the input."""
 
     @wraps(func)
-    def inner(*args, **kwargs) -> str:
+    def inner(*args, **kwargs) -> Optional[Union[str, "Text"]]:
         try:
             return func(*args, **kwargs)
-        except HelperError as e:
-            return str(e)
-        except InputArgsError as e:
-            return str(e)
+        except (HelperError, InputArgsError) as e:
+            print_to_console(e.message, style=OutputStyle.ERROR)
+            return None
+        except NotFoundWarning as e:
+            print_to_console(e.message, style=OutputStyle.WARNING)
+            return None
         except (ValueError, KeyError, TypeError, IndexError):
-            return "Error: Invalid input. Check it and try again."
+            print_to_console("Error: Invalid input. Check it and try again.", style=OutputStyle.ERROR)
+            return None
 
     return inner
