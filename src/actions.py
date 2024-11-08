@@ -207,8 +207,7 @@ def search_by_partial_name(args, book):
             f"Phone: {record.all_phones}\n"
             f"Birthday: {record.birthday or 'N/A'}\n"
             f"Address: {record.address or 'N/A'}\n"
-            f"Email: {
-                '; '.join(email.value for email in record.emails) or 'N/A'}\n" + "=" * 30
+            f"Email: {'; '.join(email.value for email in record.emails) or 'N/A'}\n" + "=" * 30
             for record in records
         )
 
