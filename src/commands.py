@@ -221,7 +221,7 @@ class Commands(Enum):
         description="Adds a note.",
         run=add_note,
         args_len=2,
-        input_help="add-note [name] [note]",
+        input_help="add-note <name> <note>",
         source=Source.NOTES,
     )
     EDIT_NOTE = Command(
@@ -229,7 +229,7 @@ class Commands(Enum):
         description="Edits a note.",
         run=edit_note,
         args_len=2,
-        input_help="edit-note [note_title] [new_body]",
+        input_help="edit-note <note_title> <new_body>",
         source=Source.NOTES,
     )
     DELETE_NOTE = Command(
@@ -237,7 +237,7 @@ class Commands(Enum):
         description="Deletes a note.",
         run=delete_note,
         args_len=1,
-        input_help="delete-note [note]",
+        input_help="delete-note <note>",
         source=Source.NOTES,
     )
     REPLACE_NOTE = Command(
@@ -245,7 +245,7 @@ class Commands(Enum):
         description="Replaces a note.",
         run=replace_note,
         args_len=2,
-        input_help="replace-note [note_title] [new_body]",
+        input_help="replace-note <note_title> <new_body>",
         source=Source.NOTES,
     )
     ADD_TAG = Command(
@@ -253,7 +253,7 @@ class Commands(Enum):
         description="Adds a tag to a note.",
         run=add_tag,
         args_len=2,
-        input_help="add-tag [note_title] [tag]",
+        input_help="add-tag <note_title> <tag>",
         source=Source.NOTES,
     )
     REMOVE_TAG = Command(
@@ -261,7 +261,7 @@ class Commands(Enum):
         description="Removes a tag from a note.",
         run=remove_tag,
         args_len=2,
-        input_help="remove-tag [note_title] [tag]",
+        input_help="remove-tag <note_title> <tag>",
         source=Source.NOTES,
     )
     ATTACH_NOTE = Command(
@@ -269,7 +269,7 @@ class Commands(Enum):
         description="Attaches a note to a contact.",
         run=attach_note,
         args_len=2,
-        input_help="attach-note [note_tittle] [contact_name]",
+        input_help="attach-note <note_tittle> <contact_name>",
         source=Source.NOTES,
     )
     SHOW_NOTES = Command(
@@ -285,7 +285,7 @@ class Commands(Enum):
         description="Shows all notes of a contact.",
         run=show_notes_contact,
         args_len=1,
-        input_help="show-notes-contact [name]",
+        input_help="show-notes-contact <name>",
         source=Source.NOTES,
     )
     SEARCH_NOTES = Command(
@@ -293,7 +293,7 @@ class Commands(Enum):
         description="Searches notes.",
         run=search_notes,
         args_len=1,
-        input_help="search-notes [query]",
+        input_help="search-notes <query>",
         source=Source.NOTES,
     )
     FIND_BY_TAG = Command(
@@ -301,7 +301,7 @@ class Commands(Enum):
         description="Finds notes by tag.",
         run=find_by_tag,
         args_len=1,
-        input_help="find-by-tag [tag]",
+        input_help="find-by-tag <tag>",
         source=Source.NOTES,
     )
     SORT_BY_TAG = Command(
@@ -309,7 +309,7 @@ class Commands(Enum):
         description="Sorts notes by tag.",
         run=sort_by_tag,
         args_len=0,
-        input_help="sort-by-tag[tag]",
+        input_help="sort-by-tag<tag>",
         source=Source.NOTES,
     )
 
