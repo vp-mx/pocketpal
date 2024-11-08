@@ -86,7 +86,13 @@ def show_all(book: "AddressBook") -> None:
     param: contacts: Contacts dictionary to read from.
     return: str: Result message.
     """
-    print_to_console(str(book.all_records))
+    columns = ["Name", "Phones", "Birthday", "Address", "Emails", "Notes"]
+    data = [
+        [record.contact_name, record.all_phones, record.birthday, record.address, record.all_emails, record.all_notes]
+        for record in book.data.values()
+    ]
+    data = sorted(data, key=lambda x: x[0])
+    console.print(create_rich_table_to_print(columns, data))
 
 
 @input_error
