@@ -279,7 +279,7 @@ class AddressBook(UserDict):
         except KeyError as e:
             raise HelperError("Record not found") from e
 
-    def get_upcoming_birthdays(self, days_interval) -> str:
+    def get_upcoming_birthdays(self, days_interval: int = 7) -> str:
         """Returns a list of upcoming birthdays within the next N days.
 
         When the birthday falls on a weekend, the congratulation date is moved to the next week.
@@ -305,4 +305,4 @@ class AddressBook(UserDict):
                     (f"Contact name: {user.name.value}, " f"congratulation date: {congratulation_date}")
                 )
 
-        return "\n".join(upcoming_birthdays) or "No upcoming birthdays found."
+        return "\n".join(upcoming_birthdays) or f"No upcoming birthdays found in next {days_interval} days."

@@ -1,12 +1,19 @@
 """Module for visualisation helper functions."""
 
 import itertools
-from typing import TYPE_CHECKING, Optional
+from enum import Enum
+from typing import Optional
 
 from rich.table import Table
 
-if TYPE_CHECKING:
-    from commands import Commands
+
+class OutputStyle(Enum):
+    """Enum for output styles."""
+
+    SUCCESS = "green"
+    ERROR = "red"
+    WARNING = "yellow"
+    INFO = "magenta"
 
 
 def create_rich_table_to_print(
@@ -25,17 +32,3 @@ def create_rich_table_to_print(
     for row in data:
         table.add_row(*row)
     return table
-
-
-def get_commands_table(cmds: type["Commands"]) -> Table:
-    """Returns a table with all the commands and their descriptions.
-
-    Note: For helper it stores into ths module due to circular imports. For Notes and AddressBook
-    similar helper functions should be stored in their respective modules.
-
-    return: Table: The table with the commands.
-    """
-    columns = ["Command Name", "Description", "Input Help"]
-    data = [[command.value.cli_name, command.value.description, command.value.input_help] for command in cmds]
-    data = sorted(data, key=lambda x: x[0])
-    return create_rich_table_to_print(columns, data)
