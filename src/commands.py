@@ -45,12 +45,11 @@ from error_handlers import InputArgsError
 
 class Source(Enum):
     """Enum to store the source where to apply command."""
+
     APP = auto()
     ALL = auto()
     ADDRESS_BOOK = auto()
     NOTES = auto()
-
-  
 
 
 @dataclass
