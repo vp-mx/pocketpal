@@ -57,7 +57,7 @@ def show_notes_contact(args, notes_book: "NoteBook") -> None:
     return: str: Result message.
     """
     name = args[0]
-    note=notes_book.show_all_for_contact(name)
+    note = notes_book.show_all_for_contact(name)
     notes_table(note)
 
 
@@ -114,19 +114,20 @@ def attach_note(args: list[str], address_book: "AddressBook", notes_book: "NoteB
     contact.add_note(note_title)
     print_to_console(f"Note {note_with_contact.title} attached to contact {contact_name}.", style=OutputStyle.SUCCESS)
 
-def search_notes(args:list[str], notes_book: "NoteBook") -> None:
+
+def search_notes(args: list[str], notes_book: "NoteBook") -> None:
     """Searches for notes containing the query in their title or body.
 
     param: query: str: The query to search for.
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
-    query =args[0]
+    query = args[0]
     search_results = notes_book.search(query)
     notes_table(search_results)
 
 
-def delete_note(args:list[str], notes_book: "NoteBook") -> None:
+def delete_note(args: list[str], notes_book: "NoteBook") -> None:
     """Deletes a note from the notes dictionary.
 
     param: note_title: str: The title of the note to delete.
@@ -140,7 +141,7 @@ def delete_note(args:list[str], notes_book: "NoteBook") -> None:
         print_to_console(f"Note {note_in_notebook.title} deleted.")
 
 
-def find_by_tag(args:list[str], notes_book: "NoteBook") -> list[str]:
+def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
     """Finds all notes with a specific tag.
 
     param: tag: str.
