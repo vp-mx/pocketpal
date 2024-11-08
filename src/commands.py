@@ -15,6 +15,7 @@ from actions import (
     add_email,
     birthdays,
     change_phone,
+    cleanup,
     edit_email,
     print_commands_table,
     remove_contact,
@@ -321,6 +322,14 @@ class Commands(Enum):
         args_len=0,
         input_help="sort-by-tag <tag>",
         source=Source.NOTES,
+    )
+    CLEANUP = Command(
+        cli_name="cleanup",
+        description="Cleans up dumps files from system.",
+        run=cleanup,
+        args_len=1,
+        input_help="cleanup <all | address-book | notes>",
+        source=Source.APP,
     )
 
     @classmethod
