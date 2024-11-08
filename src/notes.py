@@ -78,6 +78,8 @@ class NoteBook(UserDict):
         if not title in self.data:
             raise KeyError(f"Note with title {title} not found")
         del self.data[title]
+        return f"Note with title {title} deleted"
+        
 
     def edit(self, title: str, new_body: str) -> None:
         """Edit the body of an existing note by adding new text to existing one."""
@@ -128,9 +130,12 @@ class NoteBook(UserDict):
 
     def show_all_for_contact(self, contact_name: str) -> List[Note]:
         """Find all notes attached to a contact."""
-        if not any(contact_name in note.contacts for note in self.data.values()):
-            raise ValueError(f"No notes found for contact {contact_name}")
-        return [note for note in self.data.values() if contact_name in note.contacts]
+        notes=[]
+        for note in self.data.values():
+            if contact_name in note.contacts:
+                notes.append(note)
+            return notes      
+        
 
     def find_by_tag(self, tag: str) -> List[Note]:
         """Find all notes with a specific tag."""
