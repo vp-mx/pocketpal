@@ -69,7 +69,7 @@ def add_tag(args: list[str], notes_book: "NoteBook") -> None:
     note_title, tag = args
     note_in_notebook = notes_book.find(note_title)
     if not note_in_notebook:
-        raise NotFoundWarning(f"Note with title '{note_title}'")
+        raise NotFoundWarning(f"Note with title '{note_title}' not found.")
 
     notes_book.add_tag(note_title, tag)
     print_to_console(f"Tag added to note -{note_in_notebook.title}.", style=OutputStyle.SUCCESS)
@@ -86,7 +86,7 @@ def remove_tag(args: list[str], notes_book: "NoteBook") -> None:
     note_title, tag = args
     note_in_notebook = notes_book.find(note_title)
     if not note_in_notebook:
-        raise NotFoundWarning(f"Note with title '{note_title}'")
+        raise NotFoundWarning(f"Note with title '{note_title}' not found.")
     notes_book.remove_tag(note_title, tag)
     print_to_console(f"Tag {tag} removed from note -{note_in_notebook.title}.", style=OutputStyle.SUCCESS)
 
@@ -103,7 +103,7 @@ def attach_note(args: list[str], notes_book: "NoteBook") -> None:
     note_title, contact_name = args
     note_in_notebook = notes_book.find(note_title)
     if not note_in_notebook:
-        raise NotFoundWarning(f"Note with title '{note_title}'")
+        raise NotFoundWarning(f"Note with title '{note_title}' not found.")
     notes_book.attach_to_contact(note_title, contact_name)
     print_to_console(f"Note {note_in_notebook} attached to-{note_in_notebook.contacts}.", style=OutputStyle.SUCCESS)
 
@@ -132,7 +132,7 @@ def delete_note(note_title: str, notes_book: "NoteBook") -> None:
         notes_book.delete(note_title)
 
         print_to_console(f"Note {note_in_notebook.title} deleted.")
-    raise NotFoundWarning(f"Note with title '{note_title}'")
+    raise NotFoundWarning(f"Note with title '{note_title}' not found.")
 
 
 def find_by_tag(tag: str, notes_book: "NoteBook") -> list[str]:

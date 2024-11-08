@@ -122,22 +122,22 @@ class Record:
     @property
     def contact_name(self) -> str:
         """The name of the contact."""
-        return self.name.value
+        return str(self.name)
 
     @property
     def all_phones(self) -> str:
         """All phone numbers in the contact, separated by commas."""
-        return ", ".join(p.value for p in self.phones) if self.phones else "N/A"
+        return ", ".join(phone.value for phone in self.phones) if self.phones else "N/A"
 
     @property
     def all_emails(self) -> str:
         """All emails in the contact, separated by commas."""
-        return ", ".join(p.value for p in self.emails) if self.emails else "N/A"
+        return ", ".join(email.value for email in self.emails) if self.emails else "N/A"
 
     @property
     def all_notes(self) -> str:
         """All notes in the contact, separated by commas."""
-        return ", ".join(p for p in self.notes) if self.notes else "N/A"
+        return ", ".join(self.notes) if self.notes else "N/A"
 
     @property
     def address(self) -> str:
@@ -147,7 +147,7 @@ class Record:
     @property
     def birthday(self) -> str:
         """The birthday of the contact."""
-        return str(self.__birthday.value) if self.__birthday else "N/A"
+        return str(self.__birthday) if self.__birthday else "N/A"
 
     def add_phone(self, phone: str) -> None:
         """Add a phone number to the contact.
@@ -204,7 +204,7 @@ class Record:
         """Add an address to the contact.
         :param address: The address to add.
         """
-        self.address = address
+        self.__address = address
 
     def add_email(self, email):
         """Add an email to the contact.

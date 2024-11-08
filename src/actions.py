@@ -41,7 +41,7 @@ def remove_contact(args: list[str], book: "AddressBook") -> None:
     """
     name = args[0]
     if not book.find(name):
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     book.delete(name)
     print_to_console("Contact removed.", style=OutputStyle.SUCCESS)
@@ -58,7 +58,7 @@ def change_phone(args: list[str], book: "AddressBook") -> None:
     name, old_phone, new_phone = args
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     record.edit_phone(old_phone, new_phone)
     console.print("Phone number updated.", style="green")
@@ -75,7 +75,7 @@ def show_phone(args: list[str], book: "AddressBook") -> None:
     name = args[0]
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     print_to_console(f"{name}'s phones: {record.all_phones}", style=OutputStyle.SUCCESS)
 
@@ -106,7 +106,7 @@ def add_birthday(args: list[str], book: "AddressBook") -> None:
     name, birthday = args
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     record.add_birthday(birthday)
     print_to_console("Birthday added.")
@@ -123,7 +123,7 @@ def show_birthday(args: list[str], book: "AddressBook") -> None:
     name = args[0]
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     if record.birthday:
         print_to_console(str(record.birthday), style=OutputStyle.SUCCESS)
@@ -152,7 +152,7 @@ def add_address(args: list[str], book: "AddressBook") -> None:
     name, address = args
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     record.add_address(address)
     print_to_console("Address added.", style=OutputStyle.SUCCESS)
@@ -169,7 +169,7 @@ def add_email(args, book) -> None:
     name, email = args
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     record.add_email(email)
     print_to_console(f"Email '{email}' was successfully added for contact '{name}'.", style=OutputStyle.SUCCESS)
@@ -186,7 +186,7 @@ def edit_email(args, book) -> None:
     name, old_email, new_email = args
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
     record.edit_email(old_email, new_email)
     print_to_console(
         f"Email '{old_email}' was successfully changed to '{new_email}' for contact '{name}'.",
@@ -205,7 +205,7 @@ def remove_email(args, book) -> None:
     name, email = args
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
 
     record.remove_email(email)
     print_to_console(f"Email '{email}' was successfully removed from contact '{name}'.", style=OutputStyle.SUCCESS)
@@ -222,7 +222,7 @@ def show_email(args, book) -> None:
     name = args[0]
     record = book.find(name)
     if not record:
-        raise NotFoundWarning(f"Contact '{name}'")
+        raise NotFoundWarning(f"Contact '{name}' not found")
     text = "Contact doesn't have any emails" if not record.emails else "; ".join(email.value for email in record.emails)
     print_to_console(text, style=OutputStyle.SUCCESS)
 
@@ -238,7 +238,7 @@ def search_by_partial_name(args, book) -> None:
     partial_name = args[0]
     records = book.search_by_partial_name(partial_name)
     if not records:
-        raise NotFoundWarning(f"Contacts with '{partial_name}' in name")
+        raise NotFoundWarning(f"Contacts with '{partial_name}' in name not found.")
     text = "\n".join(
         f"Contact name: {record.name}\n"
         f"Phone: {record.all_phones}\n"
@@ -265,7 +265,7 @@ def print_commands_table(cmds: type["Commands"]) -> None:
 
 
 @input_error
-def cleanup(args: list[str]) -> str:
+def cleanup(args: list[str]) -> None:
     """Cleans up dumps files from system.
 
     return: str: Result message.
