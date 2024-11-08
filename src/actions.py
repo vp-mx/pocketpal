@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from address_book import AddressBook, Record
 from custom_console import console, print_to_console
 from error_handlers import NotFoundWarning, input_error
+from file_operations import ADDRESS_BOOK_FILE, NOTES_FILE, delete_data
+from notes import NoteBook
 from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
@@ -421,3 +423,26 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     notes_book.add(note_title, note)
     notes_book.attach_to_contact(note_title, name)
     print_to_console("Note added.")
+
+
+@input_error
+def cleanup(args: list[str]) -> str:
+    """Cleans up dumps files from system.
+
+    return: str: Result message.
+    """
+    config = args[0]
+
+    files_to_delete = {
+        "all": [ADDRESS_BOOK_FILE, NOTES_FILE],
+        "address-book": [ADDRESS_BOOK_FILE],
+        "notes": [NOTES_FILE],
+    }
+    if files_to_delete.get(config) is None:
+        raise NotFoundWarning("Invalid config value. Choose from 'all', 'address-book', or 'notes'.")
+
+    for file in files_to_delete[config]:
+        print(f"Deleting {file}...")
+        delete_data(file)
+
+    print_to_console("Dumps cleaned up.")
