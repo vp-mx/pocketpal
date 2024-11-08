@@ -166,16 +166,14 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     return: str: Result message.
     """
 
-    name= args[0]
-    note = ' '.join(args[1:len(args)])
-   
-    
+    name = args[0]
+    note = " ".join(args[1 : len(args)])
+
     note_title: str = f"note-{len(notes_book.values()) + 1}"
     notes_book.add(note_title, note)
     notes_book.attach_to_contact(note_title, name)
     print_to_console("Note added.")
     note_table(notes_book.find(note_title))
-    
 
 
 def notes_table(list_of_notes: list[str]) -> None:
@@ -217,4 +215,3 @@ def note_table(note: str) -> None:
     ]
     table = create_rich_table_to_print(columns, data)
     print_to_console(table)
-
