@@ -2,6 +2,7 @@
 
 from address_book import AddressBook, Record
 from error_handlers import input_error
+from notes import NoteBook
 
 
 @input_error
@@ -202,11 +203,172 @@ def search_by_partial_name(args, book):
     partial_name = args[0]
     if records := book.search_by_partial_name(partial_name):
         return "\n".join(
-            f"Contact name: {record.name}; "
-            f"phone: {record.all_phones}; "
-            f"birthday: {record.birthday or 'N/A'}; "
-            f"address: {record.address or 'N/A'}; "
-            f"email: {'; '.join(email.value for email in record.emails) or 'N/A'}"
+            f"Contact name: {record.name}\n"
+            f"Phone: {record.all_phones}\n"
+            f"Birthday: {record.birthday or 'N/A'}\n"
+            f"Address: {record.address or 'N/A'}\n"
+            f"Email: {'; '.join(email.value for email in record.emails) or 'N/A'}\n" + "=" * 30
             for record in records
         )
-    return f"Contacts with '{partial_name}' in name doesn't exist."
+
+    return f"Contacts with '{partial_name}' in name don't exist."
+
+
+@input_error
+def add_note(args: list[str], notes_book: "NoteBook") -> str:
+    """Adds a note to a contact in the notes book.
+
+    param: args: List with 2 values: name and note.
+    param: notes_book: NoteBook object to modify.
+    return: str: Result message.
+    """
+
+    name, note = args
+    note_title: str = f"note-{len(notes_book.values())+1}"
+    notes_book.add(note_title, note)
+    notes_book.attach_to_contact(note_title, name)
+    return "Note added."
+
+
+@input_error
+def edit_note(args: list[str], notes_book: "NoteBook") -> str:
+    """Edits a note in the notes dictionary.
+
+    param: args: List with 2 values: note title and new body.
+    param: notes_book: Notes dictionary to modify.
+    return: str: Result message.
+    """
+
+    note_title, new_body = args
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.edit(note_title, new_body)
+        return f"Note edited to -{note_in_notebook.body}."
+    return "Note not found."
+
+
+@input_error
+def replace_note(args: list[str], notes_book: "NoteBook") -> str:
+    """Replaces a note_body in the notes dictionary.
+
+    param: args: List with 2 values: note title and new body.
+    param: notes_book: Notes dictionary to modify.
+    return: str: Result message.
+    """
+    note_title, new_body = args
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.replace(note_title, new_body)
+        return f"Note replaced to -{note_in_notebook.body}."
+    return "Note not found."
+
+
+def show_notes(notes_book: "NoteBook") -> str:
+    """Shows all notes from the notes dictionary.
+
+    param: notes_book: Notes dictionary to read from.
+    return: str: Result message.
+    """
+    return notes_book.show_all()
+
+
+@input_error
+def show_notes_contact(name: str, notes_book: "NoteBook") -> str:
+    """Shows all notes from the notes dictionary.
+
+    param: notes_book: Notes dictionary to read from.
+    return: str: Result message.
+    """
+    return notes_book.show_all_for_contact(name)
+
+
+@input_error
+def add_tag(args: list[str], notes_book: "NoteBook") -> str:
+    """Adds a tag to a note in the notes dictionary.
+
+    param: args: List with 2 values: note title and tag.
+    param: notes_book: Notes dictionary to modify.
+    return: str: Result message.
+    """
+    note_title, tag = args
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.add_tag(note_title, tag)
+        return f"Tag added to note -{note_in_notebook.title}."
+    return "Note not found."
+
+
+@input_error
+def remove_tag(args: list[str], notes_book: "NoteBook") -> str:
+    """Removes a tag from a note in the notes dictionary.
+
+    param: args: List with 2 values: note title and tag.
+    param: notes_book: Notes dictionary to modify.
+    return: str: Result message.
+    """
+    note_title, tag = args
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.remove_tag(note_title, tag)
+        return f"Tag {tag} removed from note -{note_in_notebook.title}."
+    return "Note not found."
+
+
+@input_error
+def attach_note(args: list[str], notes_book: "NoteBook") -> str:
+    """Attaches a note to a contact in the notes dictionary.
+
+    param: args: List with 2 values: note title and contact name.
+    param: notes_book: Notes dictionary to modify.
+    return: str: Result message.
+    """
+
+    note_title, contact_name = args
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.attach_to_contact(note_title, contact_name)
+        return f"Note {note_in_notebook} attached to-{note_in_notebook.contacts}."
+    return "Note not found."
+
+
+def search_notes(query: str, notes_book: "NoteBook") -> str:
+    """Searches for notes containing the query in their title or body.
+
+    param: query: str: The query to search for.
+    param: notes_book: Notes dictionary to read from.
+    return: str: Result message.
+    """
+
+    return notes_book.search(query)
+
+
+def delete_note(note_title: str, notes_book: "NoteBook") -> str:
+    """Deletes a note from the notes dictionary.
+
+    param: note_title: str: The title of the note to delete.
+    param: notes_book: Notes dictionary to modify.
+    return: str: Result message.
+    """
+
+    if note_in_notebook := notes_book.find(note_title):
+        notes_book.delete(note_title)
+
+        return f"Note {note_in_notebook.title} deleted."
+    return "Note not found."
+
+
+def find_by_tag(tag: str, notes_book: "NoteBook") -> list[str]:
+    """Finds all notes with a specific tag.
+
+    param: tag: str.
+    param: notes_book: Notes dictionary to read from.
+    return: list: Result message.
+    """
+
+    return notes_book.find_by_tag(tag)
+
+
+def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
+    """Sorts notes by tag.
+
+    param: tag: str: The tag to sort by.
+    param: notes_book: Notes dictionary to read from.
+    return: str: Result message.
+    """
+
+    return notes_book.sort_by_tag(tag)

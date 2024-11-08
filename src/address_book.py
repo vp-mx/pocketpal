@@ -117,6 +117,7 @@ class Record:
         self.birthday: Optional[Birthday] = None
         self.address: Optional[str] = None
         self.emails = []
+        self.notes: Optional[list[str]] = []
 
     @property
     def all_phones(self):
@@ -197,8 +198,8 @@ class Record:
             old_email_obj = Email(old_email)
             if old_email_obj in self.emails:
                 self.emails[self.emails.index(old_email_obj)] = Email(new_email)
-                return True
-            raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
+            else:
+                raise HelperError(f"Email '{old_email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to edit.")
 
     def remove_email(self, email):
@@ -214,11 +215,22 @@ class Record:
             raise HelperError(f"Email '{email}' doesn't exist for this contact.")
         raise HelperError("This contact doesn't have any emails to remove.")
 
-    def __str__(self) -> str:
+    def add_note(self, note_title: str) -> None:
+        """Add a note to the contact.
+
+        :param note: The note to add.
+        """
+        self.notes.append(note_title)
+
+    def __str__(self):
         return (
-            f"Contact name: {self.name.value}; phones: {self.all_phones}; "
-            f"birthday: {self.birthday or 'N/A'}; address: {self.address or 'N/A'}; "
-            f"email: {'; '.join(email.value for email in self.emails) or 'N/A'}"
+            f"{self.__class__.__name__}("
+            f"name={self.name.value}, "
+            f"phones={self.phones}, "
+            f"birthday={self.birthday}, "
+            f"address={self.address}, "
+            f"emails={self.emails}, "
+            f"notes={self.notes})"
         )
 
 
@@ -290,7 +302,7 @@ class AddressBook(UserDict):
                     greet_date += timedelta(days=8 - greet_date.isoweekday())
                 congratulation_date = greet_date.strftime("%d.%m.%Y")
                 upcoming_birthdays.append(
-                    f"Contact name: {user.name.value}, congratulation date: {congratulation_date}"
+                    (f"Contact name: {user.name.value}, " f"congratulation date: {congratulation_date}")
                 )
 
         return "\n".join(upcoming_birthdays) or "No upcoming birthdays found."
