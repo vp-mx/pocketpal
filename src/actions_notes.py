@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from custom_console import print_to_console
 from error_handlers import NotFoundWarning, input_error
 from notes import NoteBook
+from address_book import AddressBook, Record
+from actions import show_all
 from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
@@ -92,7 +94,7 @@ def remove_tag(args: list[str], notes_book: "NoteBook") -> None:
 
 
 @input_error
-def attach_note(args: list[str], notes_book: "NoteBook") -> None:
+def attach_note(args: list[str], notes_book: "NoteBook",address_book:"AddressBook") -> None:
     """Attaches a note to a contact in the notes dictionary.
 
     param: args: List with 2 values: note title and contact name.
@@ -101,11 +103,15 @@ def attach_note(args: list[str], notes_book: "NoteBook") -> None:
     """
 
     note_title, contact_name = args
-    note_in_notebook = notes_book.find(note_title)
-    if not note_in_notebook:
-        raise NotFoundWarning(f"Note with title '{note_title}' not found.")
-    notes_book.attach_to_contact(note_title, contact_name)
-    print_to_console(f"Note {note_in_notebook} attached to-{note_in_notebook.contacts}.", style=OutputStyle.SUCCESS)
+    contact=address_book.find(contact_name)
+    note=notes_book.find(note_title)
+    if not contact or not note:
+        raise NotFoundWarning(f"Contact with name '{contact_name}' or note with title '{note_title}' not found.")
+    
+    note_with_contact=notes_book.attach_to_contact(note_title, contact_name)
+    contact.add_note(note_title)
+    
+    note_table(note_with_contact)
 
 
 def search_notes(query: str, notes_book: "NoteBook") -> None:
@@ -130,7 +136,6 @@ def delete_note(note_title: str, notes_book: "NoteBook") -> None:
 
     if note_in_notebook := notes_book.find(note_title):
         notes_book.delete(note_title)
-
         print_to_console(f"Note {note_in_notebook.title} deleted.")
     raise NotFoundWarning(f"Note with title '{note_title}' not found.")
 
@@ -158,7 +163,7 @@ def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
 
 
 @input_error
-def add_note(args: list[str], notes_book: "NoteBook") -> None:
+def add_note(args: list[str,list], notes_book: "NoteBook") -> None:
     """Adds a note to a contact in the notes book.
 
     param: args: List with 2 values: name and note. Note is a string with multiple words.
@@ -166,14 +171,15 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     return: str: Result message.
     """
 
-    name = args[0]
-    note = " ".join(args[1 : len(args)])
+    note_title: str = args[0]
+    note_body = " ".join(args[1 : len(args)])
 
-    note_title: str = f"note-{len(notes_book.values()) + 1}"
-    notes_book.add(note_title, note)
-    notes_book.attach_to_contact(note_title, name)
+    new_note=notes_book.add(note_title, note_body)
+    note_table(new_note)
     print_to_console("Note added.")
-    note_table(notes_book.find(note_title))
+   
+    
+
 
 
 def notes_table(list_of_notes: list[str]) -> None:
@@ -215,3 +221,19 @@ def note_table(note: str) -> None:
     ]
     table = create_rich_table_to_print(columns, data)
     print_to_console(table)
+
+my_notes = NoteBook()
+my_address_book = AddressBook()
+me = Record("me")
+add_note(["title", "body", "body", "body"], my_notes)
+add_note(["title2", "bodys", "bodys", "bodys"], my_notes)
+add_note(["title3", "body", "body", "body"], my_notes)
+my_address_book.add_record(me)
+attach_note(["title", "me"], my_notes,my_address_book)
+attach_note(["title2", "me"], my_notes,my_address_book)
+attach_note(["title3", "me"], my_notes,my_address_book)
+show_notes_contact("me", my_notes)
+
+show_all(my_address_book)
+
+

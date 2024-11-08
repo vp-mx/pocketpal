@@ -71,6 +71,7 @@ class NoteBook(UserDict):
     ) -> None:
         """Add a new note to the notebook."""
         self.data[title] = Note(title, body, tags, contacts)
+        return self.data[title]
 
     def delete(self, title: str) -> None:
         """Delete a note from the notebook by title."""
@@ -96,8 +97,8 @@ class NoteBook(UserDict):
         """Attach a note to a contact."""
         if not title in self.data:
             raise KeyError(f"Note with title {title} not found")
-
-        return self.data[title].attach_to_contact(contact_name)
+        self.data[title].attach_to_contact(contact_name)
+        return self.data[title]
 
     def search(self, query: str) -> List[Note]:
         """Search for notes containing the query in their title or body."""
