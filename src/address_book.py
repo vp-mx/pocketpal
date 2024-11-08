@@ -114,15 +114,40 @@ class Record:
         """
         self.name = Name(name.strip())
         self.phones: list[Phone] = []
-        self.birthday: Optional[Birthday] = None
-        self.address: Optional[str] = None
+        self.__birthday: Optional[Birthday] = None
+        self.__address: Optional[str] = None
         self.emails = []
         self.notes: Optional[list[str]] = []
 
     @property
-    def all_phones(self):
+    def contact_name(self) -> str:
+        """The name of the contact."""
+        return self.name.value
+
+    @property
+    def all_phones(self) -> str:
         """All phone numbers in the contact, separated by commas."""
         return ", ".join(p.value for p in self.phones) if self.phones else "N/A"
+
+    @property
+    def all_emails(self) -> str:
+        """All emails in the contact, separated by commas."""
+        return ", ".join(p.value for p in self.emails) if self.emails else "N/A"
+
+    @property
+    def all_notes(self) -> str:
+        """All notes in the contact, separated by commas."""
+        return ", ".join(p for p in self.notes) if self.notes else "N/A"
+
+    @property
+    def address(self) -> str:
+        """All address in the contact."""
+        return self.__address if self.__address else "N/A"
+
+    @property
+    def birthday(self) -> str:
+        """The birthday of the contact."""
+        return str(self.__birthday.value) if self.__birthday else "N/A"
 
     def add_phone(self, phone: str) -> None:
         """Add a phone number to the contact.
@@ -173,7 +198,7 @@ class Record:
 
         :param birthday: The birthday to add.
         """
-        self.birthday = Birthday(birthday)
+        self.__birthday = Birthday(birthday)
 
     def add_address(self, address: str) -> None:
         """Add an address to the contact.
@@ -221,17 +246,6 @@ class Record:
         :param note: The note to add.
         """
         self.notes.append(note_title)
-
-    def __str__(self):
-        return (
-            f"{self.__class__.__name__}("
-            f"name={self.name.value}, "
-            f"phones={self.phones}, "
-            f"birthday={self.birthday}, "
-            f"address={self.address}, "
-            f"emails={self.emails}, "
-            f"notes={self.notes})"
-        )
 
 
 class AddressBook(UserDict):
