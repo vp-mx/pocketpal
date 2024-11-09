@@ -40,7 +40,7 @@ def main():
             command, args = parse_input(user_input)
             command_object = Commands.get_command(command)
             if not command_object:
-                console.print("Invalid command.", style="bold yellow")
+                console.print("Invalid command.", style="bold red")
                 continue
             if command_object in (Commands.EXIT, Commands.CLOSE):
                 raise ExitApp
@@ -64,6 +64,10 @@ def main():
                 )
             elif command_object.value.source == Source.APP:
                 result = command_object.value.run(args) if args_len else command_object.value.run()
+            elif command_object.value.source == Source.ALL:
+                result = (
+                    command_object.value.run(args, book, notes) if args_len else command_object.value.run(book, notes)
+                )
             else:
                 raise InternalError
             if result:
