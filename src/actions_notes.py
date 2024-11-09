@@ -204,6 +204,8 @@ def notes_table(list_of_notes: list["Note"]) -> None:
         for note in list_of_notes
     ]
     table = create_rich_table_to_print(columns, data)
+    table.title = "Notes:"
+    table.title_style = "bold blue"
     print_to_console(table)
 
 

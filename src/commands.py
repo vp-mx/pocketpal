@@ -23,6 +23,7 @@ from actions import (
     search_by_partial_name,
     show_all,
     show_birthday,
+    show_contacts,
     show_email,
     show_phone,
 )
@@ -269,8 +270,16 @@ class Commands(Enum):
     )
     SHOW_ALL = Command(
         cli_name="all",
-        description="Shows all contacts in the address book.",
+        description="Shows all contacts and notes in the address book.",
         run=show_all,
+        args_len=0,
+        input_help="all",
+        source=Source.ALL,
+    )
+    SHOW_CONTACTS = Command(
+        cli_name="contacts",
+        description="Shows all contacts in the address book.",
+        run=show_contacts,
         args_len=0,
         input_help="all",
         source=Source.ADDRESS_BOOK,
@@ -292,7 +301,7 @@ class Commands(Enum):
         source=Source.ADDRESS_BOOK,
     )
     SHOW_NOTES = Command(
-        cli_name="show-notes",
+        cli_name="notes",
         description="Shows all notes.",
         run=show_notes,
         args_len=0,
