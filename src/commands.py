@@ -47,6 +47,8 @@ from file_operations import import_csv
 class Source(Enum):
     """Enum to store the source where to apply command."""
 
+    APP = auto()
+    ALL = auto()
     ADDRESS_BOOK = auto()
     NOTES = auto()
     ALL = auto()
@@ -121,7 +123,7 @@ class Commands(Enum):
         cli_name="add-note",
         description="Adds a note.",
         run=add_note,
-        args_len=2,
+        args_len=-1,
         input_help="add-note <name> <note>",
         source=Source.NOTES,
     )
@@ -139,7 +141,7 @@ class Commands(Enum):
         run=attach_note,
         args_len=2,
         input_help="attach-note <note_tittle> <contact_name>",
-        source=Source.NOTES,
+        source=Source.ALL,
     )
     BIRTHDAYS = Command(
         cli_name="birthdays",
