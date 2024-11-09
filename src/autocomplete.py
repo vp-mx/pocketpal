@@ -26,5 +26,5 @@ class CommandCompleter(Completer):
             return
 
         for command in Commands.get_commands_list():
-            if command.startswith(document.text):
+            if document.text in command:
                 yield Completion(command, start_position=-len(document.text))

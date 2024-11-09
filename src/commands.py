@@ -47,8 +47,6 @@ from file_operations import import_csv
 class Source(Enum):
     """Enum to store the source where to apply command."""
 
-    APP = auto()
-    ALL = auto()
     ADDRESS_BOOK = auto()
     NOTES = auto()
     ALL = auto()
@@ -78,7 +76,9 @@ class Command:
         param: args: List of arguments.
         raises: InputArgsError: If the number of arguments is incorrect.
         """
-        if (args is None and self.args_len == 0) or self.args_len < 0:
+        if args is None and self.args_len == 0:
+            return
+        if args is not None and len(args) >= abs(self.args_len) or self.source == Source.APP:
             return
         if args is None or len(args) != self.args_len:
             raise InputArgsError(self.input_help)

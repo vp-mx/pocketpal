@@ -2,9 +2,9 @@
 
 from collections import UserDict
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from error_handlers import HelperError
+from error_handlers import HelperError, NotFoundWarning
 
 
 class Note:
@@ -42,13 +42,13 @@ class Note:
     def add_tag(self, tag: str) -> None:
         """Add a tag to the note."""
         if len(tag) < 1 or len(tag) > 20:
-            raise ValueError("Tag must be between 1 and 20 characters")
+            raise HelperError("Tag must be between 1 and 20 characters")
         self.tags.append(tag)
 
     def remove_tag(self, tag: str) -> None:
         """Remove a tag from the note."""
         if tag not in self.tags:
-            raise HelperError(f"Tag {tag} not found")
+            raise NotFoundWarning(f"Tag {tag} not found")
         self.tags.remove(tag)
 
     def __repr__(self):
@@ -68,36 +68,36 @@ class NoteBook(UserDict):
 
     def add(
         self, title: str, body: str, tags: Optional[List[str]] = None, contacts: Optional[List[str]] = None
-    ) -> None:
+    ) -> Note:
         """Add a new note to the notebook."""
         self.data[title] = Note(title, body, tags, contacts)
         return self.data[title]
 
-    def delete(self, title: str) -> None:
+    def delete(self, title: str) -> str:
         """Delete a note from the notebook by title."""
         if not title in self.data:
-            raise KeyError(f"Note with title {title} not found")
+            raise NotFoundWarning(f"Note with title {title} not found")
         del self.data[title]
         return f"Note with title {title} deleted"
 
-    def edit(self, title: str, new_body: str) -> None:
+    def edit(self, title: str, new_body: str) -> Note:
         """Edit the body of an existing note by adding new text to existing one."""
         if not title in self.data:
-            raise HelperError(f"Note with title {title} not found")
+            raise NotFoundWarning(f"Note with title {title} not found")
         self.data[title].edit(new_body)
         return self.data[title]
 
-    def replace(self, title: str, new_body: str) -> None:
+    def replace(self, title: str, new_body: str) -> Note:
         """Edit the body of an existing note."""
         if not title in self.data:
-            raise KeyError(f"Note with title {title} not found")
+            raise NotFoundWarning(f"Note with title {title} not found")
         self.data[title].replace(new_body)
         return self.data[title]
 
-    def attach_to_contact(self, title: str, contact_name: str) -> None:
+    def attach_to_contact(self, title: str, contact_name: str) -> Note:
         """Attach a note to a contact."""
         if not title in self.data:
-            raise KeyError(f"Note with title {title} not found")
+            raise NotFoundWarning(f"Note with title {title} not found")
         self.data[title].attach_to_contact(contact_name)
         return self.data[title]
 
@@ -123,7 +123,7 @@ class NoteBook(UserDict):
         """Show all notes."""
         return self.data.values()
 
-    def find(self, title: str) -> Optional[Note]:
+    def find(self, title: str) -> Union[Note, str]:
         """Find a note in the notebook."""
         return self.data.get(title) or f"Note with title {title} not found"
 
@@ -138,11 +138,12 @@ class NoteBook(UserDict):
     def find_by_tag(self, tag: str) -> List[Note]:
         """Find all notes with a specific tag."""
         if not any(tag in note.tags for note in self.data.values()):
-            raise ValueError(f"No notes found with tag {tag}")
+            raise NotFoundWarning(f"No notes found with tag {tag}")
         return [note for note in self.data.values() if tag in note.tags]
 
     def sort_by_tag(self, tag: str) -> List[Note]:
         """Sort all notes by a specific tag."""
+
         if not any(tag in note.tags for note in self.data.values()):
             raise ValueError(f"No notes found with tag {tag}")
         with_tag = sorted([note for note in self.data.values() if tag in note.tags], key=lambda x: x.creation_date)

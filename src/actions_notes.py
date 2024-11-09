@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from address_book import AddressBook
 from custom_console import print_to_console
-from error_handlers import NotFoundWarning, input_error
-from notes import NoteBook
+from error_handlers import InputArgsError, NotFoundWarning, input_error
+from notes import Note, NoteBook
 from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
@@ -171,16 +171,17 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     param: notes_book: NoteBook object to modify.
     return: str: Result message.
     """
+    if len(args) < 2:
+        raise InputArgsError("Invalid input: add-note <note_title> <note_body>")
 
     note_title: str = args[0]
     note_body = " ".join(args[1:])
-
     new_note = notes_book.add(note_title, note_body)
     note_table(new_note)
     print_to_console("Note added.")
 
 
-def notes_table(list_of_notes: list[str]) -> None:
+def notes_table(list_of_notes: list["Note"]) -> None:
     """Prints a list  with all notes.
 
     param: list_of_notes: List of notes to print.
@@ -201,7 +202,7 @@ def notes_table(list_of_notes: list[str]) -> None:
     print_to_console(table)
 
 
-def note_table(note: str) -> None:
+def note_table(note: "Note") -> None:
     """Prints a table with a single note.
 
     param: note: Note to print.

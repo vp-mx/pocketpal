@@ -4,13 +4,10 @@ import csv
 import os
 import pickle
 from pathlib import Path
-from typing import TYPE_CHECKING, Union
+from typing import Union
 
 from address_book import AddressBook, Record
 from notes import NoteBook
-
-if TYPE_CHECKING:
-    pass
 
 FOLDER_FOR_PKL = Path().home() / "PocketPal"
 ADDRESS_BOOK_FILE = "pocket-pal-book.pkl"
@@ -55,7 +52,7 @@ def delete_data(filename):
         pass
 
 
-def import_csv(book: "AddressBook", notebook: "Notes") -> None:
+def import_csv(book: "AddressBook", notebook: "NoteBook") -> None:
     """Imports contacts from a csv file.
 
     param: file_path: Path to the csv file.
@@ -72,10 +69,17 @@ def import_csv(book: "AddressBook", notebook: "Notes") -> None:
                     record.add_birthday(row["Birthday"])
                     record.add_address(row["Address"])
                     record.add_email(row["Emails"])
-                    record.add_note(row["Notes"])
                     book.add_record(record)
         notes = FOLDER_FOR_PKL / "notes.csv"
         if notes.exists():
-            _ = notebook
+            with open(notes, newline="", encoding="utf-8") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    notebook.add(row["Title"], row["Body"])
+                    for tag in row["Tags"].split(","):
+                        notebook.add_tag(row["Title"], tag)
+                    for contact in row["Contacts"].split(","):
+                        if contact:
+                            notebook.attach_to_contact(row["Title"], contact)
     except Exception as e:
         print(f"Error importing file: {e}")
