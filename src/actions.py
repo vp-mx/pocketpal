@@ -3,10 +3,12 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
+from actions_notes import notes_table
 from address_book import AddressBook, Record
 from custom_console import console, print_to_console
 from error_handlers import NotFoundWarning, input_error
 from file_operations import ADDRESS_BOOK_FILE, NOTES_FILE, delete_data
+from notes import NoteBook
 from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
@@ -85,7 +87,17 @@ def show_phone(args: list[str], book: "AddressBook") -> None:
     print_to_console(f"{name}'s phones: {record.all_phones}", style=OutputStyle.SUCCESS)
 
 
-def show_all(book: "AddressBook", filtered_data: Optional[list[Record]] = None) -> None:
+def show_all(book: "AddressBook", notes_book: "NoteBook") -> None:
+    """Shows all contacts from the contacts dictionary.
+
+    param: contacts: Contacts dictionary to read from.
+    return: str: Result message.
+    """
+    show_contacts(book)
+    notes_table(notes_book.show_all())
+
+
+def show_contacts(book: "AddressBook", filtered_data: Optional[list[Record]] = None) -> None:
     """Shows all contacts from the contacts dictionary.
 
     param: contacts: Contacts dictionary to read from.
