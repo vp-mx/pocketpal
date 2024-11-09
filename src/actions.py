@@ -25,14 +25,14 @@ def add_contact(args: list[str], book: "AddressBook") -> None:
     if record := book.find(name):
         record.add_phone(phone)
         print_to_console(
-            f"Phone number '{phone}' added to contact '{name.replace("_", " ")}'.", style=OutputStyle.SUCCESS
+            f"Phone number '{phone}' added to contact '{name.replace('_', ' ')}'.", style=OutputStyle.SUCCESS
         )
     else:
         record = Record(name)
         record.add_phone(phone)
         book.add_record(record)
         print_to_console(
-            f"Contact '{name.replace("_", " ")}' created with phone number '{phone}'.", style=OutputStyle.SUCCESS
+            f"Contact '{name.replace('_', ' ')}' created with phone number '{phone}'.", style=OutputStyle.SUCCESS
         )
 
 
