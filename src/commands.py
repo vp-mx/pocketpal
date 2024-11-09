@@ -315,7 +315,7 @@ class Commands(Enum):
         cli_name="sort-by-tag",
         description="Sorts notes by tag.",
         run=sort_by_tag,
-        args_len=0,
+        args_len=1,
         input_help="sort-by-tag <tag>",
         source=Source.NOTES,
     )

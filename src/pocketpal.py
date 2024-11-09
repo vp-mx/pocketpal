@@ -35,6 +35,7 @@ def main():
     while True:
         try:
             user_input = session.prompt("Enter a command: ")
+            # user_input = input("Enter a command: ")
             if not user_input.strip():
                 continue
             command, args = parse_input(user_input)

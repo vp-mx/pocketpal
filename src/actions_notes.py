@@ -40,7 +40,6 @@ def replace_note(args: list[str], notes_book: "NoteBook") -> None:
     note_table(replaced)
 
 
-@input_error
 def show_notes(notes_book: "NoteBook") -> None:
     """Shows all notes from the notes dictionary.
 
@@ -145,7 +144,7 @@ def delete_note(args: list[str], notes_book: "NoteBook") -> None:
 
 
 @input_error
-def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
+def find_by_tag(args: list[str], notes_book: "NoteBook") -> None:
     """Finds all notes with a specific tag.
 
     param: tag: str.
@@ -157,13 +156,14 @@ def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
 
 
 @input_error
-def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
+def sort_by_tag(args: list[str], notes_book: "NoteBook") -> None:
     """Sorts notes by tag.
 
     param: tag: str: The tag to sort by.
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
+    tag = args[0]
     sorted_notes = notes_book.sort_by_tag(tag)
     notes_table(sorted_notes)
 
@@ -186,7 +186,6 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     print_to_console("Note added.")
 
 
-@input_error
 def notes_table(list_of_notes: list["Note"]) -> None:
     """Prints a list  with all notes.
 
@@ -208,7 +207,6 @@ def notes_table(list_of_notes: list["Note"]) -> None:
     print_to_console(table)
 
 
-@input_error
 def note_table(note: "Note") -> None:
     """Prints a table with a single note.
 
