@@ -8,7 +8,7 @@ from address_book import AddressBook
 from autocomplete import CommandCompleter
 from commands import Commands, Source
 from custom_console import console
-from error_handlers import ExitApp, InputArgsError, InternalError
+from error_handlers import ExitApp, HelperError, InputArgsError, InternalError
 from file_operations import ADDRESS_BOOK_FILE, NOTES_FILE, load_data, save_data
 from notes import NoteBook
 
@@ -60,7 +60,7 @@ def main():
                 raise InternalError
             if result:
                 console.print(result)
-        except (InputArgsError, InternalError) as error:
+        except (InputArgsError, InternalError, HelperError, Exception) as error:
             console.print(Text(str(error), style="bold red"))
         except (KeyboardInterrupt, ExitApp):
             save_data(book, ADDRESS_BOOK_FILE)

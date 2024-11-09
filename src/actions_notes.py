@@ -40,6 +40,7 @@ def replace_note(args: list[str], notes_book: "NoteBook") -> None:
     note_table(replaced)
 
 
+@input_error
 def show_notes(notes_book: "NoteBook") -> None:
     """Shows all notes from the notes dictionary.
 
@@ -115,6 +116,7 @@ def attach_note(args: list[str], address_book: "AddressBook", notes_book: "NoteB
     print_to_console(f"Note {note_with_contact.title} attached to contact {contact_name}.", style=OutputStyle.SUCCESS)
 
 
+@input_error
 def search_notes(args: list[str], notes_book: "NoteBook") -> None:
     """Searches for notes containing the query in their title or body.
 
@@ -127,6 +129,7 @@ def search_notes(args: list[str], notes_book: "NoteBook") -> None:
     notes_table(search_results)
 
 
+@input_error
 def delete_note(args: list[str], notes_book: "NoteBook") -> None:
     """Deletes a note from the notes dictionary.
 
@@ -141,6 +144,7 @@ def delete_note(args: list[str], notes_book: "NoteBook") -> None:
         print_to_console(f"Note {note_in_notebook.title} deleted.")
 
 
+@input_error
 def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
     """Finds all notes with a specific tag.
 
@@ -152,6 +156,7 @@ def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
     notes_table(notes_book.find_by_tag(tag))
 
 
+@input_error
 def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
     """Sorts notes by tag.
 
@@ -181,6 +186,7 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     print_to_console("Note added.")
 
 
+@input_error
 def notes_table(list_of_notes: list["Note"]) -> None:
     """Prints a list  with all notes.
 
@@ -202,6 +208,7 @@ def notes_table(list_of_notes: list["Note"]) -> None:
     print_to_console(table)
 
 
+@input_error
 def note_table(note: "Note") -> None:
     """Prints a table with a single note.
 

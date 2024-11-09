@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Union
 
 from address_book import AddressBook, Record
-from notes import NoteBook
+from notes import Note, NoteBook
 
 FOLDER_FOR_PKL = Path().home() / "PocketPal"
 ADDRESS_BOOK_FILE = "pocket-pal-book.pkl"
@@ -77,9 +77,15 @@ def import_csv(book: "AddressBook", notebook: "NoteBook") -> None:
                 for row in reader:
                     notebook.add(row["Title"], row["Body"])
                     for tag in row["Tags"].split(","):
-                        notebook.add_tag(row["Title"], tag)
+                        if tag and tag.strip():
+                            notebook.add_tag(row["Title"], tag.strip())
                     for contact in row["Contacts"].split(","):
                         if contact:
-                            notebook.attach_to_contact(row["Title"], contact)
+                            contact_obj = book.find(contact)
+                            note = notebook.find(row["Title"])
+                            if not contact or not isinstance(note, Note):
+                                continue
+                            note.contacts.add(contact)
+                            contact_obj.add_note(row["Title"])
     except Exception as e:
         print(f"Error importing file: {e}")

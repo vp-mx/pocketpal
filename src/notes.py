@@ -42,7 +42,7 @@ class Note:
     def add_tag(self, tag: str) -> None:
         """Add a tag to the note."""
         if len(tag) < 1 or len(tag) > 20:
-            raise HelperError("Tag must be between 1 and 20 characters")
+            raise HelperError(f"Tag must be between 1 and 20 characters. Given tag {tag} is too long.")
         self.tags.append(tag)
 
     def remove_tag(self, tag: str) -> None:
