@@ -78,7 +78,11 @@ class Command:
         """
         if args is None and self.args_len == 0:
             return
-        if args is not None and len(args) >= abs(self.args_len) or self.source == Source.APP:
+        if self.cli_name == "birthdays":
+            if len(args) > 1:
+                raise InputArgsError(self.input_help)
+            return
+        if args is not None and len(args) >= abs(self.args_len):
             return
         if args is None or len(args) != self.args_len:
             raise InputArgsError(self.input_help)
@@ -124,7 +128,7 @@ class Commands(Enum):
         description="Adds a note.",
         run=add_note,
         args_len=-1,
-        input_help="add-note <name> <note>",
+        input_help="add-note <title> <note>",
         source=Source.NOTES,
     )
     ADD_TAG = Command(
