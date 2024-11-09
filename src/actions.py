@@ -299,8 +299,15 @@ def cleanup(args: list[str], book, notebook) -> None:
     for file in files_to_delete[config]:
         print(f"Deleting {file}...")
         delete_data(file)
-    if config in ("all", "address-book"):
+    if config == "all":
         book.clear()
-    if config in ("all", "notes"):
         notebook.clear()
+    elif config == "address-book":
+        book.clear()
+        for note in notebook.data.values():
+            note.contacts.clear()
+    else:
+        notebook.clear()
+        for record in book.data.values():
+            record.notes.clear()
     print_to_console("Dumps cleaned up.")

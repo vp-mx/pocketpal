@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from address_book import AddressBook
 from custom_console import print_to_console
-from error_handlers import NotFoundWarning, input_error
-from notes import NoteBook
+from error_handlers import InputArgsError, NotFoundWarning, input_error
+from notes import Note, NoteBook
 from visualisation import OutputStyle, create_rich_table_to_print
 
 if TYPE_CHECKING:
@@ -115,6 +115,7 @@ def attach_note(args: list[str], address_book: "AddressBook", notes_book: "NoteB
     print_to_console(f"Note {note_with_contact.title} attached to contact {contact_name}.", style=OutputStyle.SUCCESS)
 
 
+@input_error
 def search_notes(args: list[str], notes_book: "NoteBook") -> None:
     """Searches for notes containing the query in their title or body.
 
@@ -127,6 +128,7 @@ def search_notes(args: list[str], notes_book: "NoteBook") -> None:
     notes_table(search_results)
 
 
+@input_error
 def delete_note(args: list[str], notes_book: "NoteBook") -> None:
     """Deletes a note from the notes dictionary.
 
@@ -141,7 +143,8 @@ def delete_note(args: list[str], notes_book: "NoteBook") -> None:
         print_to_console(f"Note {note_in_notebook.title} deleted.")
 
 
-def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
+@input_error
+def find_by_tag(args: list[str], notes_book: "NoteBook") -> None:
     """Finds all notes with a specific tag.
 
     param: tag: str.
@@ -152,13 +155,15 @@ def find_by_tag(args: list[str], notes_book: "NoteBook") -> list[str]:
     notes_table(notes_book.find_by_tag(tag))
 
 
-def sort_by_tag(tag: str, notes_book: "NoteBook") -> str:
+@input_error
+def sort_by_tag(args: list[str], notes_book: "NoteBook") -> None:
     """Sorts notes by tag.
 
     param: tag: str: The tag to sort by.
     param: notes_book: Notes dictionary to read from.
     return: str: Result message.
     """
+    tag = args[0]
     sorted_notes = notes_book.sort_by_tag(tag)
     notes_table(sorted_notes)
 
@@ -171,16 +176,17 @@ def add_note(args: list[str], notes_book: "NoteBook") -> None:
     param: notes_book: NoteBook object to modify.
     return: str: Result message.
     """
+    if len(args) < 2:
+        raise InputArgsError("Invalid input: add-note <note_title> <note_body>")
 
     note_title: str = args[0]
     note_body = " ".join(args[1:])
-
     new_note = notes_book.add(note_title, note_body)
     note_table(new_note)
     print_to_console("Note added.")
 
 
-def notes_table(list_of_notes: list[str]) -> None:
+def notes_table(list_of_notes: list["Note"]) -> None:
     """Prints a list  with all notes.
 
     param: list_of_notes: List of notes to print.
@@ -201,7 +207,7 @@ def notes_table(list_of_notes: list[str]) -> None:
     print_to_console(table)
 
 
-def note_table(note: str) -> None:
+def note_table(note: "Note") -> None:
     """Prints a table with a single note.
 
     param: note: Note to print.

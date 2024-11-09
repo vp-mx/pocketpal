@@ -8,7 +8,7 @@ from address_book import AddressBook
 from autocomplete import CommandCompleter
 from commands import Commands, Source
 from custom_console import console
-from error_handlers import ExitApp, InputArgsError, InternalError
+from error_handlers import ExitApp, HelperError, InputArgsError, InternalError
 from file_operations import ADDRESS_BOOK_FILE, NOTES_FILE, load_data, save_data
 from notes import NoteBook
 
@@ -35,6 +35,7 @@ def main():
     while True:
         try:
             user_input = session.prompt("Enter a command: ")
+            # user_input = input("Enter a command: ")
             if not user_input.strip():
                 continue
             command, args = parse_input(user_input)
@@ -46,22 +47,10 @@ def main():
                 raise ExitApp
             command_object.value.validate_args(args)
             args_len = command_object.value.args_len
-            if command_object == Commands.CLEANUP:
-                command_object.value.run(args)
-                if args[0] == "all" or args[0] == "address-book":
-                    book = AddressBook()
-                if args[0] == "all" or args[0] == "notes":
-                    notes = NoteBook()
-
-                continue
             if command_object.value.source == Source.ADDRESS_BOOK:
                 result = command_object.value.run(args, book) if args_len else command_object.value.run(book)
             elif command_object.value.source == Source.NOTES:
                 result = command_object.value.run(args, notes) if args_len else command_object.value.run(notes)
-            elif command_object.value.source == Source.ALL:
-                result = (
-                    command_object.value.run(args, book, notes) if args_len else command_object.value.run(book, notes)
-                )
             elif command_object.value.source == Source.APP:
                 result = command_object.value.run(args) if args_len else command_object.value.run()
             elif command_object.value.source == Source.ALL:
@@ -72,7 +61,7 @@ def main():
                 raise InternalError
             if result:
                 console.print(result)
-        except (InputArgsError, InternalError) as error:
+        except (InputArgsError, InternalError, HelperError, Exception) as error:
             console.print(Text(str(error), style="bold red"))
         except (KeyboardInterrupt, ExitApp):
             save_data(book, ADDRESS_BOOK_FILE)

@@ -47,8 +47,6 @@ from file_operations import import_csv
 class Source(Enum):
     """Enum to store the source where to apply command."""
 
-    APP = auto()
-    ALL = auto()
     ADDRESS_BOOK = auto()
     NOTES = auto()
     ALL = auto()
@@ -78,7 +76,13 @@ class Command:
         param: args: List of arguments.
         raises: InputArgsError: If the number of arguments is incorrect.
         """
-        if (args is None and self.args_len == 0) or self.args_len < 0:
+        if args is None and self.args_len == 0:
+            return
+        if self.cli_name == "birthdays":
+            if len(args) > 1:
+                raise InputArgsError(self.input_help)
+            return
+        if args is not None and len(args) >= abs(self.args_len):
             return
         if args is None or len(args) != self.args_len:
             raise InputArgsError(self.input_help)
@@ -124,7 +128,7 @@ class Commands(Enum):
         description="Adds a note.",
         run=add_note,
         args_len=-1,
-        input_help="add-note <name> <note>",
+        input_help="add-note <title> <note>",
         source=Source.NOTES,
     )
     ADD_TAG = Command(
@@ -315,7 +319,7 @@ class Commands(Enum):
         cli_name="sort-by-tag",
         description="Sorts notes by tag.",
         run=sort_by_tag,
-        args_len=0,
+        args_len=1,
         input_help="sort-by-tag <tag>",
         source=Source.NOTES,
     )

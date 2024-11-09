@@ -25,84 +25,42 @@ Also added opportunity to add tags to any note, delete tag and find note by tag.
 
 3. Enjoy!
 
-### Contribution
-
-1. Clone the repository to your local machine:
-   ```bash
-   git clone https://github.com/vp-mx/pocketpal.git
-   ```
-2. Create a virtual environment in the project directory: `python -m venv .venv`
-3. Activate the virtual environment:
-    - Mac, Linux
-   ```bash
-   source .venv/bin/activate
-   ```
-    - Windows
-   ```bash
-   .venv\Scripts\activate
-   ```
-4. Install the required packages: `pip install -r requirements.txt`
-5. Make changes to the code
-6. Run the application: `python src` and test your changes
-7. Create a new branch
-   ```bash
-    git checkout -b <branch_name>
-   ```
-8. Commit your changes:
-
-   ```bash
-   git commit -m "Your message"
-   ```
-
-9. Push to the branch: 
-   ```bash
-   git push origin <branch_name>
-   ```
-10. Create a pull request on GitHub, add reviewers, and wait for approval
-11. Merge the pull request
-12. Profit!
 
 ### Usage
 
 Write a command in the terminal to interact with the application. User can use the next commands:
 
-- `hello`: Print a greeting message.
-- `close` or `exit`: Save data and exit the application.
-- `add <name> <phone>`: Add a new contact.
-- `remove <name>`: Remove the contact.
-- `change <name> <new_phone>`: Change an existing contact's phone number.
-- `phone <name>`: Show the phone number of a contact.
-- `all`: Show all contacts.
-- `add-birthday <name> <date>`: Add a birthday to a contact.
-- `show-birthday <name>`: Show the birthday of a contact.
-- `birthdays`: Show upcoming birthdays within the next 7 days.
-- `add-address`: Add address to contact
 
-### Code style
-
-This project follows the PEP 8 code style.
-Pre-commit hooks are configured to automatically run `black`, `isort` and `pylint` to ensure consistent formatting and code quality..
-
-### Pre Commit
-
-To install pre-commit hooks, run the following command:
-
-Install the required packages: `pip install pre-commit`
-
-Then, run the following command:
-
-```bash
-pre-commit install
-```
-
-To perform the pre-commit checks manually, run the following command:
-
-```bash
-pre-commit run --all-files
-```
-
-Skip pre-commit checks before a commit:
-
-```bash
-git commit --no-verify
-```
+| Command             | Description                                  | Usage                                                           |
+|---------------------|----------------------------------------------|-----------------------------------------------------------------|
+| `add`               | Adds a contact to the address book.          | `add <name> <phone>` (Use `_` to separate first and last names) |
+| `add-address`       | Adds an address to a contact.                | `add-address <name> <address>`                                  |
+| `add-birthday`      | Adds a birthday to a contact.                | `add-birthday <name> <birthday>`                                |
+| `add-email`         | Adds an email to a contact.                  | `add-email <name> <email>`                                      |
+| `all`               | Shows all contacts in the address book.      | `all`                                                           |
+| `birthdays`         | Shows upcoming birthdays.                    | `birthdays <days_interval>`                                     |
+| `change`            | Changes contact's phone.                     | `change <name> <old_phone> <new_phone>`                         |
+| `edit-email`        | Edits the email of a contact.                | `edit-email <name> <old_email> <new_email>`                     |
+| `phone`             | Shows the phone number of a contact.         | `phone <name>`                                                  |
+| `remove`            | Removes a contact from the address book.     | `remove <name>`                                                 |
+| `remove-email`      | Removes the email of a contact.              | `remove-email <name> <email>`                                   |
+| `search`            | Searches for contacts by partial name.       | `search <partial_name>`                                         |
+| `show-birthday`     | Shows the birthday of a contact.             | `show-birthday <name>`                                          |
+| `show-email`        | Shows the email of a contact.                | `show-email <name>`                                             |
+| `add-note`          | Adds a note.                                 | `add-note <title> <note>`                                       |
+| `add-tag`           | Adds a tag to a note.                        | `add-tag <note_title> <tag>`                                    |
+| `delete-note`       | Deletes a note.                              | `delete-note <note>`                                            |
+| `edit-note`         | Edits a note.                                | `edit-note <note_title> <new_body>`                             |
+| `find-by-tag`       | Finds notes by tag.                          | `find-by-tag <tag>`                                             |
+| `remove-tag`        | Removes a tag from a note.                   | `remove-tag <note_title> <tag>`                                 |
+| `replace-note`      | Replaces a note.                             | `replace-note <note_title> <new_body>`                          |
+| `search-notes`      | Searches notes.                              | `search-notes <query>`                                          |
+| `show-notes`        | Shows all notes.                             | `show-notes`                                                    |
+| `show-notes-contact`| Shows all notes of a contact.                | `show-notes-contact <name>`                                     |
+| `sort-by-tag`       | Sorts notes by tag.                          | `sort-by-tag <tag>`                                             |
+| `attach-note`       | Attaches a note to a contact.                | `attach-note <note_title> <contact_name>`                       |
+| `cleanup`           | Cleans up dump files from the system.        | `cleanup <all \| address-book \| notes>`                        |
+| `import`            | Imports contacts and notes from a CSV file.  | `import`                                                        |
+| `close`             | Closes the assistant bot.                    | `close`                                                         |
+| `exit`              | Exits the assistant bot.                     | `exit`                                                          |
+| `help`              | Shows the list of available commands.        | `help`                                                          |
