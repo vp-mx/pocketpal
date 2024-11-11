@@ -274,7 +274,7 @@ def search_by_partial_name(args, book) -> None:
     records = book.search_by_partial_name(partial_name)
     if not records:
         raise NotFoundWarning(f"Contacts with '{partial_name}' in name not found.")
-    show_all(book, records)
+    show_contacts(book, records)
 
 
 def print_commands_table(cmds: type["Commands"]) -> None:
