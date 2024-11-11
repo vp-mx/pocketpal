@@ -21,7 +21,8 @@ def edit_note(args: list[str], notes_book: "NoteBook") -> None:
     return: str: Result message.
     """
 
-    note_title, new_body = args
+    note_title = args[0]
+    new_body = " ".join(args[1:])
     edited_note = notes_book.edit(note_title, new_body)
     note_table(edited_note)
 
@@ -34,7 +35,8 @@ def replace_note(args: list[str], notes_book: "NoteBook") -> None:
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
-    note_title, new_body = args
+    note_title = args[0]
+    new_body = " ".join(args[1:])
 
     replaced = notes_book.replace(note_title, new_body)
     note_table(replaced)
