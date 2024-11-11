@@ -191,7 +191,10 @@ def add_address(args: list[str], book: "AddressBook") -> None:
         raise NotFoundWarning(f"Contact '{name}' not found")
 
     record.add_address(address)
-    print_to_console("Address added.", style=OutputStyle.SUCCESS)
+    if address:
+        print_to_console(f"Address '{address}' was successfully added for contact '{name}'.", style=OutputStyle.SUCCESS)
+    else:
+        print_to_console(f"Address removed for contact '{name}'.", style=OutputStyle.SUCCESS)
 
 
 @input_error
