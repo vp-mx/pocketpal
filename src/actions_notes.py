@@ -16,13 +16,15 @@ if TYPE_CHECKING:
 def edit_note(args: list[str], notes_book: "NoteBook") -> None:
     """Edits a note in the notes dictionary.
 
-    param: args: List with 2 values: note title and new body.
+    param: args: List with any qty values: note title and new body.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
 
     note_title = args[0]
     new_body = " ".join(args[1:])
+    if not new_body:
+        raise InputArgsError("Invalid input: edit-note <note_title> <new_body>")
     edited_note = notes_book.edit(note_title, new_body)
     note_table(edited_note)
 
@@ -31,12 +33,14 @@ def edit_note(args: list[str], notes_book: "NoteBook") -> None:
 def replace_note(args: list[str], notes_book: "NoteBook") -> None:
     """Replaces a note_body in the notes dictionary.
 
-    param: args: List with 2 values: note title and new body.
+    param: args: List with any qty values: note title and new body.
     param: notes_book: Notes dictionary to modify.
     return: str: Result message.
     """
     note_title = args[0]
     new_body = " ".join(args[1:])
+    if not new_body:
+        raise InputArgsError("Invalid input: replace-note <note_title> <new_body>")
 
     replaced = notes_book.replace(note_title, new_body)
     note_table(replaced)

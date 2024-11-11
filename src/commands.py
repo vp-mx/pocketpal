@@ -192,7 +192,7 @@ class Commands(Enum):
         cli_name="edit-note",
         description="Edits a note.",
         run=edit_note,
-        args_len=2,
+        args_len=-1,
         input_help="edit-note <note_title> <new_body>",
         source=Source.NOTES,
     )
@@ -248,7 +248,7 @@ class Commands(Enum):
         cli_name="replace-note",
         description="Replaces a note.",
         run=replace_note,
-        args_len=2,
+        args_len=-1,
         input_help="replace-note <note_title> <new_body>",
         source=Source.NOTES,
     )
