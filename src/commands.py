@@ -105,7 +105,7 @@ class Commands(Enum):
         description="Adds an address to a contact.",
         run=add_address,
         args_len=2,
-        input_help="add-address <name> <address>",
+        input_help="add-address <name> <address> Use _ to separate words in address.",
         source=Source.ADDRESS_BOOK,
     )
     ADD_BIRTHDAY = Command(
@@ -129,7 +129,7 @@ class Commands(Enum):
         description="Adds a note.",
         run=add_note,
         args_len=-1,
-        input_help="add-note <title> <note>",
+        input_help="add-note <title> <body>. Feel free to add as many words as you want to body.",
         source=Source.NOTES,
     )
     ADD_TAG = Command(
@@ -145,7 +145,7 @@ class Commands(Enum):
         description="Attaches a note to a contact.",
         run=attach_note,
         args_len=2,
-        input_help="attach-note <note_tittle> <contact_name>",
+        input_help="attach-note <note_title> <contact_name>",
         source=Source.ALL,
     )
     BIRTHDAYS = Command(
