@@ -30,7 +30,7 @@ def main():
 
     book = load_data(ADDRESS_BOOK_FILE) or AddressBook()
     notes = load_data(NOTES_FILE) or NoteBook()
-    session = PromptSession(completer=CommandCompleter())
+    session = PromptSession(completer=CommandCompleter(book, notes))
     console.print(Panel(":wave: Welcome to the assistant bot!", expand=False), style="bold green")
     while True:
         try:
