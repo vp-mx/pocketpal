@@ -83,7 +83,7 @@ class Command:
             if len(args) > 1:
                 raise InputArgsError(self.input_help)
             return
-        if args is not None and len(args) >= abs(self.args_len):
+        if args is not None and self.args_len < 0 and len(args) >= abs(self.args_len):
             return
         if args is None or len(args) != self.args_len:
             raise InputArgsError(self.input_help)
@@ -104,8 +104,8 @@ class Commands(Enum):
         cli_name="add-address",
         description="Adds an address to a contact.",
         run=add_address,
-        args_len=2,
-        input_help="add-address <name> <address> Use _ to separate words in address.",
+        args_len=-1,
+        input_help="add-address <name> <address>. Feel free to add as many words as you want to body",
         source=Source.ADDRESS_BOOK,
     )
     ADD_BIRTHDAY = Command(
