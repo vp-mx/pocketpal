@@ -184,7 +184,8 @@ def add_address(args: list[str], book: "AddressBook") -> None:
     param: book: AddressBook object to modify.
     return: str: Result message.
     """
-    name, address = args
+    name= args[0]
+    address = " ".join(args[1:])
     record = book.find(name)
     if not record:
         raise NotFoundWarning(f"Contact '{name}' not found")
