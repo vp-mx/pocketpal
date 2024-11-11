@@ -129,11 +129,8 @@ class NoteBook(UserDict):
 
     def show_all_for_contact(self, contact_name: str) -> List[Note]:
         """Find all notes attached to a contact."""
-        notes = []
-        for note in self.data.values():
-            if contact_name in note.contacts:
-                notes.append(note)
-            return notes
+        notes = [note for note in self.data.values() if contact_name in note.contacts]
+        return notes if notes else f"No notes found for contact {contact_name}"
 
     def find_by_tag(self, tag: str) -> List[Note]:
         """Find all notes with a specific tag."""
