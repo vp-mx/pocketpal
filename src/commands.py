@@ -105,7 +105,7 @@ class Commands(Enum):
         description="Adds an address to a contact.",
         run=add_address,
         args_len=2,
-        input_help="add-address <name> <address> Use _ to separate words in address.",
+        input_help="add-address <name> <address>. Feel free to add as many words as you want to body",
         source=Source.ADDRESS_BOOK,
     )
     ADD_BIRTHDAY = Command(
